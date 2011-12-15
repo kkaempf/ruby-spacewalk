@@ -4,7 +4,7 @@ module Spacewalk
     def initialize client
       # hash of <capability> => <version>
       @caps = {}
-      client.http_last_response["x-rhn-server-capability"].each do |caps|
+      client.http_last_response["x-rhn-server-capability"].split(",").each do |caps|
 	caps.split(",").each do |cap|
 #	  puts "#{cap}"
 	  raise "Invalid cap '#{cap}'" unless cap =~ /(\s+)?(((\w+)|\.)+)\((\d(-\d)?)\)=(\d)/
