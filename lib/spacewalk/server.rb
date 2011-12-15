@@ -20,8 +20,12 @@ module Spacewalk
 
 private
     def call name, *args
-      puts "Call #{name}(#{args.inspect})"
+#      puts "Call #{name}(#{args.inspect})"
       begin
+	# remove trailing nil values, nil is not supported in xmlrpc
+	while args.size > 0 && args[-1].nil? do
+	  args.pop
+	end
 	result = @client.call(name, *args)
       rescue Exception => e
 	raise e unless e.message =~ /Wrong content-type/
@@ -56,6 +60,7 @@ public
     # options:
     #  :noconfig => true - don't load @config
     #  :server => string - url of server (for initial registration)
+    #  :systemid => string
     #
     def initialize options = {}
       @config = Spacewalk::Config.new
@@ -84,9 +89,10 @@ public
       @capabilities = Spacewalk::Capabilities.new @client
 			      
       @client.http_header_extra["X-Up2date-Version"] = "1.6.42" # from rhn-client-tools.spec
-				  
-      unless options[:noconfig]
-	@systemid = Spacewalk::SystemId.new @client, @config
+      @client.http_header_extra["X-RHN-Client-Capability"] = "packages.extended_profile(2)=1"
+      @systemid = options[:systemid]
+      unless @systemid || options[:noconfig]
+        @systemid = Spacewalk::SystemId.new(@client, @config).to_xml
       end
       # check for distribution update
 #      my_id = @systemid.os_release
@@ -112,7 +118,7 @@ public
     def actions
       report = Spacewalk::StatusReport.status
 
-      result = call "queue.get", @systemid.to_xml, ACTION_VERSION, report
+      result = call "queue.get", @systemid, ACTION_VERSION, report
       puts "Actions => #{result.inspect}"
       
       if action = result["action"]
@@ -121,7 +127,7 @@ public
       puts "Actions => #{result.inspect}"
     end
     
-    def register activationkey, profile_name, other = {}, packages = nil
+    def register activationkey, profile_name, other = {}
       auth_dict = {}
       auth_dict["profile_name"] = profile_name
       #"os_release" : up2dateUtils.getVersion(),
@@ -136,7 +142,11 @@ public
       # if cfg['supportsSMBIOS']:
       #	auth_dict["smbios"] = _encode_characters(hardware.get_smbios())
       STDERR.puts "registration.new_system #{auth_dict.inspect}"
-      call "registration.new_system", auth_dict, packages
+      @systemid = call "registration.new_system", auth_dict
+    end
+    
+    def send_packages packages
+      call "registration.add_packages", @systemid, packages
     end
   end
 end
