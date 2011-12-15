@@ -1,0 +1,203 @@
+Client protocol
+
+From looking at spacewalk/client/rhel/rhn-client-tools/src/up2date_client/up2dateAuth.py
+
+- client configuration
+  - /etc/sysconfig/rhn/up2date
+    - text
+    - augmented <key>[<comment>] = <value>
+    'cfg'
+    
+- where is my server ?
+  - ./rhn-client-tools/src/up2date_client/rpcServer.py
+  - access through proxy
+      if cfg["enableProxy"]:
+        proxyHost = config.getProxySetting()
+
+      if cfg["enableProxyAuth"]:
+        proxyUser = cfg["proxyUser"] or None
+	proxyPassword = cfg["proxyPassword"] or None
+		    
+- support for multiple servers
+    serverUrls = config.getServerlURL()
+      ./rhn-client-tools/src/up2date_client/config.py
+    -> cfg["serverURL"] = https://manager.suse.de/XMLRPC
+      handler = /RPC2
+    -> could be multiple
+    serverList = ServerList(serverUrls)
+
+- secure communication with server
+    ca = cfg["sslCACert"]
+    if isinstance(ca, basestring):
+      ca = [ca]
+		
+    rhns_ca_certs = ca or ["/usr/share/rhn/RHNS-CA-CERT"]
+
+- build up http(s) header
+    s.add_header("X-Up2date-Version", up2dateUtils.version())
+
+- send up the (client) capabality info
+    headerlist = clientCaps.caps.headerFormat()
+    for (headerName, value) in headerlist:
+      s.add_header(headerName, value)
+		    
+- client needs to authenticate 
+  - cfg["systemIdPath] -> systemIdPath=/etc/sysconfig/rhn/systemid
+  - /etc/sysconfig/rhn/systemid 
+    - xml formatted
+    
+- does a version check of rpmdb with systemid
+  - spacewalk/client/rhel/rhn-client-tools/src/up2date_client/up2dateUtils.py
+  - spacewalk/client/rhel/rhn-client-tools/src/up2date_client/transaction.py
+  - checks provider of redhat-release or distribution-release
+  - if the system was updated, client will get a new id
+  - can be overridden via cfg["versionOverride"]
+
+- populates http header 
+  from /etc/sysconfig/rhn/clientCaps.d
+  with "X-RHN-Client-Capability: <name>(<version>)=<value>"
+
+- report = { "uname" => [<uname>], "uptime" => <uptime>]
+  os.uname(): ('Linux', 'kkaempf', '3.0.4-43-desktop', '#1 SMP PREEMPT Wed Aug 31 09:30:44 UTC 2011 (a432f18)', 'i686')
+              (uname -s, uname -n, uname -r, uname -v, uname -m)
+  uptime : /proc/uptime as [int, int]
+
+= server side xmlrpc
+  spacewalk/backend/server/handlers/xmlrpc
+  call <file>.<method>
+
+- call registration.welcome_message
+  => sets 'checked in' in database
+
+- call get.actions systemid, ACTION_VERSION, report until empty
+  Remove example:
+  {"action"=>["packages.remove", [[["alsa-devel", "1.0.24.1", "30.1", "", ""]]]], "id"=>1061, "version"=>2}
+  id == action id
+    -> https://manager.suse.de/rhn/schedule/ActionDetails.do?aid=1061
+  Install/Update example:
+  {"action"=>["packages.update", [[["aqbanking", "5.0.10", "5.12", "", ""], ["epdfview", "0.1.8", "5.1", "", ""]]]], "id"=>1063, "version"=>2}
+  Reboot action:
+  {"action"=>["reboot.reboot", []], "id"=>1066, "version"=>2}
+  Hardware refresh:
+  {"action"=>["hardware.refresh_list", []], "id"=>1067, "version"=>2}
+
+  => only gets the next scheduled action, not all scheduled actions
+
+  queue.submit(up2dateAuth.getSystemId(), action_id, status, message,data)
+
+
+
+- run local actions
+  LOCAL_ACTIONS = [("packages.checkNeedUpdate", ("rhnsd=1",))]
+  ->  method = getMethod.getMethod(method, "/usr/share/rhn/","actions")
+      (status,message,data) = method(*params, **kwargs)
+
+- packages.checkNeedUpdate
+  compate st_mtime of (cfg["dbpath"] || "/var/lib/rpm")/Packages with /var/lib/up2date/dbtimestamp
+  -> rhnPackageInfo.updatePackageProfile
+       rhel/rhn-client-tools/src/up2date_client/rhnPackageInfo.py
+     get package hash (pkgUtils.getInstalledPackageList(getArch=1)
+       rhel/rhn-client-tools/src/up2date_client/rpmUtils.py
+       "Return list of packages. Package is hash with keys name, epoch,
+        version, release and optionaly arch and cookie"
+       "name": <string-value>
+       "epoch": <string-value>
+       "version": <string-value>
+       "release": <string-value>
+       "installtime": <string-value>
+       "arch": <string-value>
+       "cookie"
+     unless server.has_capability xmlrpc.packages.extended_profile=2
+       convert hash to list
+     xmlrpc registration.update_packages(systemid, packages)
+
+============
+
+First call to Server: registration.welcome_message
+returns
+Header
+- "x-transport-info"=>["Extended Capabilities Transport (C) Red Hat, Inc (version $Revision$)"],
+- "x-rhn-server-capability"=>
+    ["registration.finish_message(1)=1",
+     "applet.has_base_channel(1)=1",
+     "rhncfg.filetype.directory(1)=1",
+     "registration.register_osad(1)=1",
+     "registration.delta_packages(1)=1",
+     "xmlrpc.packages.extended_profile(1-2)=1",
+     "registration.remaining_subscriptions(1)=1",
+     "registration.update_contact_info(1)=1",
+     "staging_content(1)=1",
+     "registration.extended_update_support(1)=1",
+     "xmlrpc.packages.suse_products(1)=1",
+     "rhncfg.content.base64_decode(1)=1",
+     "registration.smbios(1)=1",
+     "xmlrpc.errata.patch_names(1)=1",
+     "xmlrpc.login.extra_data(1)=1"],
+- "x-rhn-client-version"=>["0"],
+- "content-transfer-encoding"=>["base64"],
+- "connection"=>["close"],
+- "content-type"=>["text/base64"],
+- "x-rhn-proxy-version"=>["None"],
+- "date"=>["Wed, 14 Dec 2011 10:54:55 GMT"],
+- "server"=>["Apache"],
+- "content-length"=>["163"],
+- "content-encoding"=>["x-zlib"]
+Body
+eJyzsa/IzVEoSy0qzszPs1U31DNQt7fjsslNLcnITwlKLS7IzytOBQoUJBYl5hbDGEC6LDGnNNXO
+prikKDMv3S4oNUXBI7FEwS+1pDy/KFshPDUnOT83VcE3tbg4MT3VRh+qzkYfoo/LRh9mkD7caH10
+WwGMyDXu
+-> zlib.deflate.decodebase64
+  <?xml version='1.0'?>
+    <methodResponse>
+      <params>
+        <param>
+          <value><string>Red Hat Network Welcome Message</string></value>
+        </param>
+      </params>
+    </methodResponse>
+===========
+
+rhnreg_ks
+
+- needs user/pass or activation code
+
+- registered? cfg["systemIdPath] exists
+
+- server.capabilities.validate()
+
+- packageList = pkgUtils.getInstalledPackageList(getArch=getArch)
+  hardwareList = hardware.Hardware()
+  profilename = self.options.profilename || RegisterKsCli.__generateProfileName(hardwareList)
+  other = {}
+    if self.options.systemorgid:
+      other['org_id'] = self.options.systemorgid
+  (virt_uuid, virt_type) = rhnreg.get_virt_info()
+  if not virt_uuid is None:
+    other['virt_uuid'] = virt_uuid
+    other['virt_type'] = virt_type
+  systemId = rhnreg.registerSystem(token = self.options.activationkey,
+                                   profileName = profilename,
+                                   other = other)
+  rhnreg.sendHardware(systemId, hardwareList)
+  rhnreg.sendPackages(systemId, packageList)
+  # write out the new id
+  if isinstance(systemId, unicode):
+    rhnreg.writeSystemId(unicode.encode(systemId, 'utf-8'))
+  else:
+    rhnreg.writeSystemId(systemId)
+  rhnreg.cfg.save()
+  rhnreg.sendVirtInfo(systemId)
+  rhnreg.startRhnsd()
+
+- profileName
+  Convert Internationalized domain name from Pune encoding to Unicode
+  for hw in hardwareList:
+    if hw['class'] == 'NETINFO':
+      hostname = hw.get('hostname')
+      ipaddr = hw.get('ipaddr')
+   if hostname:
+     profileName = idn_pune_to_unicode(hostname)
+   else:
+     if ipaddr:
+       profileName = ipaddr
+						
