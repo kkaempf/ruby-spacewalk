@@ -148,5 +148,8 @@ public
     def send_packages packages
       call "registration.add_packages", @systemid, packages
     end
+    def refresh_hardware devices
+      call "registration.refresh_hw_profile", @systemid, devices
+    end
   end
 end
