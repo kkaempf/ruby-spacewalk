@@ -3,3 +3,5 @@ pkg
 lib/spacewalk/doc
 lib/doc
 .yardoc
+core
+*.xml
