@@ -11,9 +11,8 @@ Gem::Specification.new do |s|
   s.email       = ["kkaempf@suse.de"]
   s.homepage    = "https://github.com/kkaempf/ruby-spacewalk"
   s.summary     = %q{A pure-Ruby implementation of the Spacewalk client side}
-  s.description = %q{The primary purpose is to fake clients in
-Spacewalk. The example is to use Openwsman to talk to a Windows system
-and have it appear in Spacewalk - for asset management.}
+  s.description = %q{Can be used for testing or to attach 'foreign'
+systems}
   
   s.rubyforge_project = "spacewalk"
 
