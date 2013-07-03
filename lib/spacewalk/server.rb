@@ -5,7 +5,7 @@ module XMLRPC
     end
   end
 end
-
+                                                               
 module Spacewalk
   class Server
     # from /usr/sbin/rhn_check
@@ -13,6 +13,7 @@ module Spacewalk
     ACTION_VERSION = 2 
 
     require "xmlrpc/client"
+    require 'openssl'
     require 'uri'
     require 'zlib'
     require 'base64'
@@ -71,7 +72,7 @@ public
 	uri = URI.parse(@config.serverurl)
       end
 
-      args = {:host=>uri.host, :path => uri.path, :use_ssl => (uri.scheme == "https")}
+      args = {:host=>uri.host, :path => uri.path, :use_ssl => (uri.scheme == "https"), :timeout => 120 }
 
       unless options[:noconfig]
 	if @config.httpProxy
@@ -82,7 +83,7 @@ public
       @client = XMLRPC::Client.new_from_hash args
 
       @client.http_header_extra = {}
-
+      @client.instance_variable_get("@http").verify_mode = OpenSSL::SSL::VERIFY_NONE
       welcome
 
       # parse server capabilities
@@ -103,7 +104,7 @@ public
     # welcome to/from server
     def welcome
       result = call "registration.welcome_message"
-      puts "Welcome => #{result.inspect}"
+#      puts "Welcome => #{result.inspect}"
     end
     
     # get system O/S version
@@ -119,12 +120,12 @@ public
       report = Spacewalk::StatusReport.status
 
       result = call "queue.get", @systemid, ACTION_VERSION, report
-      puts "Actions => #{result.inspect}"
+#      puts "Actions => #{result.inspect}"
       
       if action = result["action"]
 	result["action"] = @client.get_parser.parseMethodCall(action)
       end      
-      puts "Actions => #{result.inspect}"
+#      puts "Actions => #{result.inspect}"
     end
     
     def register activationkey, profile_name, other = {}
@@ -141,7 +142,7 @@ public
 
       # if cfg['supportsSMBIOS']:
       #	auth_dict["smbios"] = _encode_characters(hardware.get_smbios())
-      STDERR.puts "registration.new_system #{auth_dict.inspect}"
+#      STDERR.puts "registration.new_system #{auth_dict.inspect}"
       @systemid = call "registration.new_system", auth_dict
     end
     
