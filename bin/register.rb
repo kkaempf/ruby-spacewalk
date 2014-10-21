@@ -12,11 +12,11 @@ require File.expand_path(File.join(File.dirname(__FILE__),'windows'))
 # Usage
 #
 
-def usage msg
+def usage msg=nil
   STDERR.puts "*** #{msg}" if msg
   STDERR.puts "Usage:"
-  STDERR.puts "  register --server <server> --key <activationkey> --name <name> --description <description> <host>"
-  exit( msg ? 1 : 0)
+  STDERR.puts "  register --server <server> --key <activationkey> --name <name> --description <description> --port <port> --arch <arch> --solv <solv> <host>"
+  exit (msg ? 1 : 0)
 end
 
 #
@@ -26,6 +26,7 @@ end
 def parse_args
   require 'getoptlong'
   opts = GetoptLong.new(
+    [ "--help",        "-?",  GetoptLong::NO_ARGUMENT ],
     [ "--server",      "-s",  GetoptLong::REQUIRED_ARGUMENT ],
     [ "--name",        "-n",  GetoptLong::REQUIRED_ARGUMENT ],
     [ "--description", "-d",  GetoptLong::REQUIRED_ARGUMENT ],
@@ -38,6 +39,7 @@ def parse_args
   opts.each do |opt,arg|
     result[opt[2..-1].to_sym] = arg
   end
+  usage if result[:help]
   usage("No server url given") unless result[:server]
   usage("No activationkey given") unless result[:key]
   unless result[:solv]
@@ -53,6 +55,8 @@ end
 
 begin
   parms = parse_args
+rescue SystemExit
+  raise
 rescue Exception => e
   usage e.to_s
 end
