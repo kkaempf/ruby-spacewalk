@@ -1,3 +1,7 @@
+#
+# Windows
+# Interfaces to Windows system via WINRM protocol
+#
 
 require 'openwsman'
 require 'cgi'
