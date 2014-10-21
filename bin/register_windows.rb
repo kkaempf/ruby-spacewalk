@@ -1,5 +1,5 @@
 #
-# register
+# register_windows
 #
 
 # for testing: prefer local path
@@ -15,7 +15,8 @@ require File.expand_path(File.join(File.dirname(__FILE__),'windows'))
 def usage msg=nil
   STDERR.puts "*** #{msg}" if msg
   STDERR.puts "Usage:"
-  STDERR.puts "  register --server <server> --key <activationkey> --name <name> --description <description> --port <port> --arch <arch> --solv <solv> <host>"
+  STDERR.puts "  register_windows --server <server> --key <activationkey> --name <name> --description <description> --solv <solv> --port <windows-port> --arch <arch> <windows-host>"
+  STDERR.puts "Does a registration of a remote Windows system (identified by <windows-host> and <windows-port>"
   exit (msg ? 1 : 0)
 end
 
