@@ -12,7 +12,7 @@ module Spacewalk
 	  # fixme: handle array-type values
 	  @config[key.downcase] = val.empty? ? nil : val
 	end
-      end
+      end rescue nil
     end
     
     def [] key
