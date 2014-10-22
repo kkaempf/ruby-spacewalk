@@ -67,6 +67,7 @@ public
       @config = Spacewalk::Config.new
       if options[:noconfig]
 	uri = URI.parse(options[:server])
+        raise "Server '#{options[:server]}' is not proper URL" unless uri.host
 	uri.path = "/XMLRPC"
       else
 	uri = URI.parse(@config.serverurl)
