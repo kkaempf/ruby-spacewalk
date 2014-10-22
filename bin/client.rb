@@ -35,24 +35,14 @@ class Client
   def packages
     packages = []
 
-    IO.popen("rpm -qa") do |io|
+    IO.popen("rpm -qa --queryformat \"%{name} %{epoch} %{version} %{release} %{arch} %{installtime}\n\"") do |io|
       io.each do |rpm|
-        case rpm
-          # rpm = "glibc-2.18-4.21.1.x86_64"
-          when /([-_\w]+)-(:\d)?([\w\.+~]+)-([\w\.]+)\.([\w_]+)/
-          package = Hash.new
-          package["name"] = $1
-          package["epoch"] = $2 if $2
-          package["version"] = $3
-          package["release"] = $4
-          package["arch"] = $5
-          packages << package
-          # gpg-pubkey-dcef338c-5075f0e2
-          when /gpg-pubkey-[.]*/
-            # puts "Skip #{rpm}"
-          else
-            raise "No match '#{rpm}'"
-          end
+        name,epoch,version,release,arch,installtime = rpm.split(" ")
+        next if name == "gpg-pubkey"
+        next if arch == "src"
+        package = { "name" => name, "epoch" => epoch, "version" => version, "release" => release, "arch" => arch, "installtime" => installtime.to_i }
+        puts package.inspect
+        packages << package
       end
     end
     

@@ -22,6 +22,9 @@ def usage msg=nil
   STDERR.puts "    --key <activationkey>"
   STDERR.puts "    --name <visible-name>"
   STDERR.puts "    --description <description>"
+  STDERR.puts "    --packages"
+  STDERR.puts "    --hardware"
+  STDERR.puts "    --description <description>"
   STDERR.puts "    --solv <solv-file>"
   STDERR.puts "    --arch <arch>"
   STDERR.puts "Does a registration of a 'remote' client system"
@@ -41,6 +44,8 @@ def parse_args
     [ "--description", "-d",  GetoptLong::REQUIRED_ARGUMENT ],
     [ "--key",         "-k",  GetoptLong::REQUIRED_ARGUMENT ],
     [ "--arch",        "-a",  GetoptLong::REQUIRED_ARGUMENT ],
+    [ "--packages",    "-p",  GetoptLong::NO_ARGUMENT ],
+    [ "--hardware",    "-h",  GetoptLong::NO_ARGUMENT ],
     [ "--solv",        "-S",  GetoptLong::REQUIRED_ARGUMENT ]
   )
   result = {}
@@ -49,7 +54,6 @@ def parse_args
   end
   usage if result[:help]
   usage("No server url given") unless result[:server]
-  usage("No activationkey given") unless result[:key]
   unless result[:solv]
     usage("No <client-fqdn> given") if ARGV.empty?
     result[:fqdn] = ARGV.shift
@@ -89,15 +93,17 @@ end
 begin
   server = Spacewalk::Server.new :noconfig => true, :server => parms[:server], :systemid => systemid
 
+  puts "  Computing profile"
+  # get "os_release","release_name","architecture"
+  profile = client.profile
+  # override with CLI arg
+  profile["architecture"] = parms[:arch] if parms[:arch]
+  # if empty, Spacewalk will create it
+  profile["description"] = parms[:description]
+
   unless systemid
     puts "Must register"
-    puts "  Computing profile"
-    # get "os_release","release_name","architecture"
-    profile = client.profile
-    # override with CLI arg
-    profile["architecture"] = parms[:arch] if parms[:arch]
-    # if empty, Spacewalk will create it
-    profile["description"] = parms[:description]
+    usage("No activationkey given") unless result[:key]
     puts "Registering"
     systemid = server.register parms[:key], parms[:name]||fqdn, profile
     File.open(fqdn, "w+") do |f|
@@ -105,6 +111,16 @@ begin
     end
     puts "#{fqdn} successfully registered"
   end
+
+  if parms[:packages]
+    packages = client.packages
+    server.send_packages packages
+  end
+  
+#  if parms[:hardware]
+#    hardware = client.hardware
+#    server.refresh_hardware hardware
+#  end
 
 rescue
   raise
