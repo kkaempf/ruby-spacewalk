@@ -49,11 +49,37 @@ def parse_args
   result
 end
 
-# convert actions to promises
-# Actions => {"id"=>6434, "version"=>2, "action"=>["packages.remove", [[["accountsservice-devel", "0.6.38", "79.1", "", ""]]]]}
-# [{"id"=>6437, "version"=>2, "action"=>["packages.update", [[["aalib-devel", "1.4.0", "503.1.3", "", ""]]]]}]
+# convert action to promises
+#  {"id"=>6434, "version"=>2, "action"=>["packages.remove", [[["accountsservice-devel", "0.6.38", "79.1", "", ""]]]]}
+#  {"id"=>6437, "version"=>2, "action"=>["packages.update", [[["aalib-devel", "1.4.0", "503.1.3", "", ""]]]]}
 # 
-def mk_promise actions
+def mk_promise action
+  id = action["id"]
+  task, packages = action["action"]
+  promise = "bundle agent "
+  case task
+  when "packages.remove"
+    promise << "mgr_remove"
+    policy = "add"
+  when "packages.update"
+    promise << "mgr_update"
+    policy = "remove"
+  else
+    raise "Task '#{task}' not supported"
+  end
+  promise << "\n{\n  vars:\n    \"package_list\" slist => {\n      "
+  first = true
+  packages[0].each do |package|
+    name, version, release, epoch, arch = package
+    promise << ", " unless first
+    first = false
+    promise << "\"#{name}-#{version}-#{release}\""
+  end
+  promise << "\n    }\n  packages:\n    \"$(package_list)\"\n"
+  promise << "      package_policy => \"#{policy}\",\n"
+  promise << "      package_method => generic,\n"
+  promise << "      comment => \"Action #{id}\";\n"
+  promise << "}\n"
 end
 
 #------------------------------------
@@ -84,8 +110,10 @@ begin
   if actions
     actions = [ actions ] unless actions.is_a? Array
     actions.each do |action|
-      mk_promise action
-      server.submit action
+      puts mk_promise action
+      unless parms[:future]
+        server.submit_response parms[:action], "0", "Action converted to promise", { }
+      end
     end
   end 
 rescue
