@@ -19,7 +19,7 @@ talking to the Spacewalk server.
 All commands have the following options in common
 
   * `--server <spacewalk-url>` to specify the full url of the spacewalk server
-  * * Example: `--server http://spacewalk.opensuse.org`
+    * Example: `--server http://spacewalk.opensuse.org`
 
 ### Registration
 
@@ -28,14 +28,14 @@ stores the `system_id` as a file with the system name.
 
 #### Synopsis
 
-  register_remote <options> <client-system-name>
+  `register_remote <options> <client-system-name>`
 
-  <options>
-  `--server <spacewalk-url>` - required, specifies the spacewalk server
-  `--key <activation-key>` - requires, specifies the activation key
-  `--packages` - optional, upload locally installed packages
-  `--description <text>` - optional, a text line to identify the system
-  `--arch <arch>` - optional, to simulate different architectures
+  Possible `<options>`:
+  * `--server <spacewalk-url>` - required, specifies the spacewalk server
+  * `--key <activation-key>` - requires, specifies the activation key
+  * `--packages` - optional, upload locally installed packages
+  * `--description <text>` - optional, a text line to identify the system
+  * `--arch <arch>` - optional, to simulate different architectures
 
 #### Registration example
 
@@ -52,8 +52,11 @@ pending in the server.
 
 #### Synopsis
 
-  `--server <spacewalk-url>` - required, specifies the spacewalk server
-  `--future <hours>` - optional, returns future actions
+  `actions <options> <client-system-name>`
+
+  Possible `<options>`:
+  * `--server <spacewalk-url>` - required, specifies the spacewalk server
+  * `--future <hours>` - optional, returns future actions
 
 #### Actions example
 
@@ -67,10 +70,13 @@ client to submit a final result.
 
 #### Synopsis
 
-  `--server <spacewalk-url>` - required, specifies the spacewalk server
-  `--action <action_id>` - required, the id of the action
-  `--message <text>` - optional, text information about the result
-  `--result <exit-code>` - optional, exit code of a command
+  `submit <options> <client-system-name>`
+
+  Possible `<options>`:
+  * `--server <spacewalk-url>` - required, specifies the spacewalk server
+  * `--action <action_id>` - required, the id of the action
+  * `--message <text>` - optional, text information about the result
+  * `--result <exit-code>` - optional, exit code of a command
 
 ### Action results examples
 
