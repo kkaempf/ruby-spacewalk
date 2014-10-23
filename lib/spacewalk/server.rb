@@ -116,25 +116,53 @@ public
       end
       result
     end
-    
+    #
+    # get immediately pending actions
+    #
     def actions
       report = Spacewalk::StatusReport.status
-
+      puts "report => #{report.inspect}"
+      puts "@systemid => #{@systemid.inspect}"
+      
       result = call "queue.get", @systemid, ACTION_VERSION, report
-#      puts "Actions => #{result.inspect}"
+      puts "queue.get  => #{result.inspect}"
       
       if action = result["action"]
 	result["action"] = @client.get_parser.parseMethodCall(action)
       end      
-#      puts "Actions => #{result.inspect}"
+      puts "Actions => #{result.inspect}"
     end
-    
+    #
+    # get future actions
+    #   needs "staging_content" server capability
+    #
+    # time_window: (int) number of hours to look forward
+    #
+    def future_actions time_window
+      report = Spacewalk::StatusReport.status
+      puts "report => #{report.inspect}"
+
+      result = call "queue.get_future_actions", @systemid, time_window
+      puts "queue.get_future_actions  => #{result.inspect}"
+      
+      if action = result["action"]
+	result["action"] = @client.get_parser.parseMethodCall(action)
+      end      
+      puts "Future actions => #{result.inspect}"
+    end
+    #
+    # submit action result back to server
+    #
+    def submit_response action_id, status, message, data
+      result = call "queue.submit", @systemid, action_id, status, message, data
+    end
+    #
+    # register with activation key
+    # profile_name is hash of "os_release" => version, "release_name" => name, "architecture" => arch }
+    #
     def register activationkey, profile_name, other = {}
       auth_dict = {}
       auth_dict["profile_name"] = profile_name
-      #"os_release" : up2dateUtils.getVersion(),
-      #"release_name" : up2dateUtils.getOSRelease(),
-      #"architecture" : up2dateUtils.getArch() }
       # dict of other bits to send 
       auth_dict.update other
       auth_dict["token"] = activationkey
@@ -146,10 +174,15 @@ public
 #      STDERR.puts "registration.new_system #{auth_dict.inspect}"
       @systemid = call "registration.new_system", auth_dict
     end
-    
+    #
+    # send package list to server
+    #
     def send_packages packages
       call "registration.add_packages", @systemid, packages
     end
+    #
+    # send hardware details to server
+    #
     def refresh_hardware devices
       call "registration.refresh_hw_profile", @systemid, devices
     end
