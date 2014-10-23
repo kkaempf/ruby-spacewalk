@@ -139,21 +139,26 @@ public
     # time_window: (int) number of hours to look forward
     #
     def future_actions time_window
+      time_window = time_window.to_i unless time_window.is_a? Fixnum
       report = Spacewalk::StatusReport.status
-      puts "report => #{report.inspect}"
+      puts "future_actions #{time_window}"
 
-      result = call "queue.get_future_actions", @systemid, time_window
-      puts "queue.get_future_actions  => #{result.inspect}"
-      
-      if action = result["action"]
-	result["action"] = @client.get_parser.parseMethodCall(action)
-      end      
-      puts "Future actions => #{result.inspect}"
+      results = call "queue.get_future_actions", @systemid, time_window
+      puts "queue.get_future_actions  => #{results.inspect}"
+      results.map! do |result|
+        if action = result["action"]
+          result["action"] = @client.get_parser.parseMethodCall(action)
+        end
+        result
+      end
+      puts "Future actions => #{results.inspect}"
+      results
     end
     #
     # submit action result back to server
     #
     def submit_response action_id, status, message, data
+      raise "Data must be hash" unless data.is_a? Hash
       result = call "queue.submit", @systemid, action_id, status, message, data
     end
     #
