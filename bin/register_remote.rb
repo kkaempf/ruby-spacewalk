@@ -24,7 +24,6 @@ def usage msg=nil
   STDERR.puts "    --description <description>"
   STDERR.puts "    --packages"
   STDERR.puts "    --hardware"
-  STDERR.puts "    --description <description>"
   STDERR.puts "    --solv <solv-file>"
   STDERR.puts "    --arch <arch>"
   STDERR.puts "Does a registration of a 'remote' client system"
@@ -103,7 +102,7 @@ begin
 
   unless systemid
     puts "Must register"
-    usage("No activationkey given") unless result[:key]
+    usage("No activationkey given") unless parms[:key]
     puts "Registering"
     systemid = server.register parms[:key], parms[:name]||fqdn, profile
     File.open(fqdn, "w+") do |f|
