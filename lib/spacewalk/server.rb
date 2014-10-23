@@ -5,12 +5,12 @@ module XMLRPC
     end
   end
 end
-                                                               
+                                                         
 module Spacewalk
   class Server
     # from /usr/sbin/rhn_check
     # action version we understand
-    ACTION_VERSION = 2 
+    ACTION_VERSION = 2
 
     require "xmlrpc/client"
     require 'openssl'
@@ -89,7 +89,7 @@ public
 
       # parse server capabilities
       @capabilities = Spacewalk::Capabilities.new @client
-			      
+
       @client.http_header_extra["X-Up2date-Version"] = "1.6.42" # from rhn-client-tools.spec
       @client.http_header_extra["X-RHN-Client-Capability"] = "packages.extended_profile(2)=1"
       @systemid = options[:systemid]
@@ -101,13 +101,13 @@ public
 #      server_id = osversion
 
     end
-    
+
     # welcome to/from server
     def welcome
       result = call "registration.welcome_message"
 #      puts "Welcome => #{result.inspect}"
     end
-    
+
     # get system O/S version
     def osversion
       result = @config.versionOverride
@@ -121,16 +121,16 @@ public
     #
     def actions
       report = Spacewalk::StatusReport.status
-      puts "report => #{report.inspect}"
-      puts "@systemid => #{@systemid.inspect}"
-      
+#      puts "report => #{report.inspect}"
+#      puts "@systemid => #{@systemid.inspect}"
+
       result = call "queue.get", @systemid, ACTION_VERSION, report
-      puts "queue.get  => #{result.inspect}"
-      
+#      puts "queue.get  => #{result.inspect}"
+
       if action = result["action"]
 	result["action"] = @client.get_parser.parseMethodCall(action)
-      end      
-      puts "Actions => #{result.inspect}"
+      end
+#      puts "Actions => #{result.inspect}"
     end
     #
     # get future actions
@@ -141,17 +141,17 @@ public
     def future_actions time_window
       time_window = time_window.to_i unless time_window.is_a? Fixnum
       report = Spacewalk::StatusReport.status
-      puts "future_actions #{time_window}"
+#      puts "future_actions #{time_window}"
 
       results = call "queue.get_future_actions", @systemid, time_window
-      puts "queue.get_future_actions  => #{results.inspect}"
+#      puts "queue.get_future_actions  => #{results.inspect}"
       results.map! do |result|
         if action = result["action"]
           result["action"] = @client.get_parser.parseMethodCall(action)
         end
         result
       end
-      puts "Future actions => #{results.inspect}"
+#      puts "Future actions => #{results.inspect}"
       results
     end
     #
@@ -168,7 +168,7 @@ public
     def register activationkey, profile_name, other = {}
       auth_dict = {}
       auth_dict["profile_name"] = profile_name
-      # dict of other bits to send 
+      # dict of other bits to send
       auth_dict.update other
       auth_dict["token"] = activationkey
       # auth_dict["username"] = username
