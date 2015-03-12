@@ -3,21 +3,21 @@
 #
 
 # for testing: prefer local path
-$: << File.expand_path(File.join(File.dirname(__FILE__),"..","lib"))
+$LOAD_PATH << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
-require "spacewalk"
-require File.expand_path(File.join(File.dirname(__FILE__),'windows'))
+require 'spacewalk'
+require File.expand_path(File.join(File.dirname(__FILE__), 'windows'))
 
 #
 # Usage
 #
 
-def usage msg=nil
+def usage(msg=nil)
   STDERR.puts "*** #{msg}" if msg
-  STDERR.puts "Usage:"
-  STDERR.puts "  register_windows --server <server> --key <activationkey> --name <name> --description <description> --solv <solv> --port <windows-port> --arch <arch> <windows-host>"
-  STDERR.puts "Does a registration of a remote Windows system (identified by <windows-host> and <windows-port>"
-  exit (msg ? 1 : 0)
+  STDERR.puts 'Usage:'
+  STDERR.puts '  register_windows --server <server> --key <activationkey> --name <name> --description <description> --solv <solv> --port <windows-port> --arch <arch> <windows-host>'
+  STDERR.puts 'Does a registration of a remote Windows system (identified by <windows-host> and <windows-port>'
+  exit(msg ? 1 : 0)
 end
 
 #
@@ -27,26 +27,26 @@ end
 def parse_args
   require 'getoptlong'
   opts = GetoptLong.new(
-    [ "--help",        "-?",  GetoptLong::NO_ARGUMENT ],
-    [ "--server",      "-s",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--name",        "-n",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--description", "-d",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--key",         "-k",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--port",        "-p",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--arch",        "-a",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--solv",        "-S",  GetoptLong::REQUIRED_ARGUMENT ]
+    ['--help',        '-?',  GetoptLong::NO_ARGUMENT],
+    ['--server',      '-s',  GetoptLong::REQUIRED_ARGUMENT],
+    ['--name',        '-n',  GetoptLong::REQUIRED_ARGUMENT],
+    ['--description', '-d',  GetoptLong::REQUIRED_ARGUMENT],
+    ['--key',         '-k',  GetoptLong::REQUIRED_ARGUMENT],
+    ['--port',        '-p',  GetoptLong::REQUIRED_ARGUMENT],
+    ['--arch',        '-a',  GetoptLong::REQUIRED_ARGUMENT],
+    ['--solv',        '-S',  GetoptLong::REQUIRED_ARGUMENT]
   )
   result = {}
-  opts.each do |opt,arg|
+  opts.each do |opt, arg|
     result[opt[2..-1].to_sym] = arg
   end
   usage if result[:help]
-  usage("No server url given") unless result[:server]
-  usage("No activationkey given") unless result[:key]
+  usage('No server url given') unless result[:server]
+  usage('No activationkey given') unless result[:key]
   unless result[:solv]
-    usage("No <host> given") if ARGV.empty?
+    usage('No <host> given') if ARGV.empty?
     result[:fqdn] = ARGV.shift
-    usage("Multiple <host>s given") unless ARGV.empty?
+    usage('Multiple <host>s given') unless ARGV.empty?
   end
   result
 end
@@ -58,7 +58,7 @@ begin
   parms = parse_args
 rescue SystemExit
   raise
-rescue Exception => e
+rescue StandardError => e
   usage e.to_s
 end
 
@@ -83,17 +83,17 @@ begin
   server = Spacewalk::Server.new :noconfig => true, :server => parms[:server], :systemid => systemid
 
   unless systemid
-    puts "Must register"
-    puts "Retrieving Windows profile"
+    puts 'Must register'
+    puts 'Retrieving Windows profile'
     # get "os_release","release_name","architecture"
     profile = windows.profile
     # override with CLI arg
-    profile["architecture"] = parms[:arch] if parms[:arch]
+    profile['architecture'] = parms[:arch] if parms[:arch]
     # if empty, Spacewalk will create it
-    profile["description"] = parms[:description]
-    puts "Registering"
-    systemid = server.register parms[:key], parms[:name]||fqdn, profile
-    File.open(fqdn, "w+") do |f|
+    profile['description'] = parms[:description]
+    puts 'Registering'
+    systemid = server.register parms[:key], parms[:name] || fqdn, profile
+    File.open(fqdn, 'w+') do |f|
       f.write systemid
     end
     puts "#{fqdn} successfully registered"

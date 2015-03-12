@@ -120,35 +120,35 @@ end
 count = parms[:count].to_i rescue 1
 
 profile = fake_profile
-profile['packages'] = packages if packages
+profile['packages'] = packages
 
 start = Time.now
 puts "Start at #{start}, #{count} systems"
 
+threads = []
 good = 0
-server = Spacewalk::Server.new :noconfig => true, :server => parms[:server]
-
 count.times do |i|
-  begin
+  threads[i] = Thread.new do
+    begin
+      server = Spacewalk::Server.new :noconfig => true, :server => parms[:server]
 
-    # get "os_release","release_name","architecture"
-    name = format('%s%04d', parms[:name], i)
-    print "Registering #{name}\n"
-    systemid = server.register parms[:key], name, profile
-    File.open("#{name}.systemid", 'w+') do |f|
-      f.write systemid
+      # get "os_release","release_name","architecture"
+      name = format('%s%04d', parms[:name], i)
+      print "Registering #{name}\n"
+      systemid = server.register parms[:key], name, profile
+      File.open("#{name}.systemid", 'w+') do |f|
+        f.write systemid
+      end
+      print "#{name} successfully registered\n"
+      good += 1
+    rescue
+      STDERR.print "*** #{name} failed: #{e}"
     end
-    print "#{name} successfully registered\n"
-    good += 1
-  rescue StandardError => e
-    STDERR.puts "*** #{name} failed: #{e}"
   end
 end
+puts 'Waiting for threads'
+threads.each(&:join)
 
 stop = Time.now
 elapsed = stop - start
-if good > 0
-  puts "Registered #{good} of #{count} systems at #{parms[:server]} in #{elapsed} seconds (#{good / elapsed} systems/sec, #{elapsed / good} secs/system)"
-else
-  puts 'Oops, no systems were registered'
-end
+puts "Registered #{good} of #{count} systems in #{elapsed} seconds (#{good / elapsed} systems/sec)"
