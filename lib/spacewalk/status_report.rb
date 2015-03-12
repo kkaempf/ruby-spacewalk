@@ -7,11 +7,11 @@ module Spacewalk
       #               (uname -s, uname -n, uname -r, uname -v, uname -m)
       status['uname'] = [`uname -s`.chomp, `uname -n`.chomp, `uname -r`.chomp, `uname -v`.chomp, `uname -m`.chomp]
       begin
-	File.open('/proc/uptime') do |f|
-	  status['uptime'] = f.read.split(' ').map(&:to_i)
-	end
+        File.open('/proc/uptime') do |f|
+          status['uptime'] = f.read.split(' ').map(&:to_i)
+        end
       rescue
-	nil
+        nil
       end
 #      puts status.inspect
       status

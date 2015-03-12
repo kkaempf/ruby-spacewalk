@@ -24,30 +24,30 @@ module Spacewalk
     def call(name, *args)
 #      puts "Call #{name}(#{args.inspect})"
       begin
-	# remove trailing nil values, nil is not supported in xmlrpc
-	args.pop while args.size > 0 && args[-1].nil?
-	result = @client.call(name, *args)
+        # remove trailing nil values, nil is not supported in xmlrpc
+        args.pop while args.size > 0 && args[-1].nil?
+        result = @client.call(name, *args)
       rescue StandardError => e
-	raise e unless e.message =~ /Wrong content-type/
+        raise e unless e.message =~ /Wrong content-type/
       end
       response = @client.http_last_response
       fail "XMLRPC failed with #{response.code}" unless response.code == '200'
       body = response.body
       case response['content-type']
       when 'text/base64'
-	body = Base64.decode64(body)
+        body = Base64.decode64(body)
       when 'text/xml'
-	# fallthru
+        # fallthru
       else
         STDERR.puts "Unhandled content-type #{response['content-type']}"
       end
       case response['content-encoding']
       when 'x-zlib'
-	body = Zlib::Inflate.inflate(body)
+        body = Zlib::Inflate.inflate(body)
       when nil
-	# fallthru
+        # fallthru
       else
-	STDERR.puts "Unhandled content-encoding #{response['content-encoding']}"
+        STDERR.puts "Unhandled content-encoding #{response['content-encoding']}"
       end
       ok, result = @client.get_parser.parseMethodResponse(body)
       fail unless ok
@@ -66,19 +66,19 @@ module Spacewalk
     def initialize(options = {})
       @config = Spacewalk::Config.new
       if options[:noconfig]
-	uri = URI.parse(options[:server])
- fail "Server '#{options[:server]}' is not proper URL" unless uri.host
-	uri.path = '/XMLRPC'
+        uri = URI.parse(options[:server])
+        fail "Server '#{options[:server]}' is not proper URL" unless uri.host
+        uri.path = '/XMLRPC'
       else
-	uri = URI.parse(@config.serverurl)
+        uri = URI.parse(@config.serverurl)
       end
 
       args = {:host => uri.host, :path => uri.path, :use_ssl => (uri.scheme == 'https'), :timeout => 120 }
 
       unless options[:noconfig]
-	if @config.httpProxy
-	  args[:proxy_host], clientargs[:proxy_port] = @config.httpProxy.split ':'
-	end
+        if @config.httpProxy
+          args[:proxy_host], clientargs[:proxy_port] = @config.httpProxy.split ':'
+        end
       end
 
       @client = XMLRPC::Client.new_from_hash args
@@ -111,7 +111,7 @@ module Spacewalk
     def osversion
       result = @config.versionOverride
       unless result
-	# find rpm provider of redhat-release or distribution-release, get its version
+        # find rpm provider of redhat-release or distribution-release, get its version
       end
       result
     end
@@ -128,7 +128,7 @@ module Spacewalk
 
       action = result['action']
       if action
-	result['action'] = @client.get_parser.parseMethodCall(action)
+        result['action'] = @client.get_parser.parseMethodCall(action)
       end
 #      puts "Actions => #{result.inspect}"
     end
@@ -176,7 +176,7 @@ module Spacewalk
       # auth_dict["password"] = password
 
       # if cfg['supportsSMBIOS']:
-      #	auth_dict["smbios"] = _encode_characters(hardware.get_smbios())
+      # auth_dict["smbios"] = _encode_characters(hardware.get_smbios())
 #      STDERR.puts "registration.new_system #{auth_dict.inspect}"
       @systemid = call 'registration.new_system', auth_dict
     end

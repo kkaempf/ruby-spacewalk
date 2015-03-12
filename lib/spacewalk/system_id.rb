@@ -14,8 +14,8 @@ module Spacewalk
       #           <value><string>admin</string></value>
       #         </member>
       File.open(@path) do |f|
-	@raw = f.read
-	@members = client.get_parser.parseMethodResponse(@raw)
+        @raw = f.read
+        @members = client.get_parser.parseMethodResponse(@raw)
       end
       puts "SystemId => #{@members.inspect}"
     end

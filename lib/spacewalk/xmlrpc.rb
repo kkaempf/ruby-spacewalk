@@ -8,28 +8,28 @@ module Spacewalk
       puts "value2ruby node #{node}"
       case node.name
       when 'string'
-	node.text
+        node.text
       when 'struct'
-	fail 'value2ruby: <member> not following <struct>' unless node[0].name == 'member'
-	value = {}
-	puts "Struct #{node}"
-	node.each_element('member') do |e|
-	  name = e.elements['member/name'].text
-	  v = value2ruby m.elements['member/value']
-	  value[name] = v
-	end
-	value
+        fail 'value2ruby: <member> not following <struct>' unless node[0].name == 'member'
+        value = {}
+        puts "Struct #{node}"
+        node.each_element('member') do |e|
+          name = e.elements['member/name'].text
+          v = value2ruby m.elements['member/value']
+          value[name] = v
+        end
+        value
       when 'array'
-	fail 'value2ruby: <data> not following <array>' unless node[0].name == 'data'
-	value = []
-#	puts "Array #{node}"
-	node.each_element('data/value') do |e|
-#	  puts "recursive #{e}"
-	  value << value2ruby(e)
-	end
-	value
+        fail 'value2ruby: <data> not following <array>' unless node[0].name == 'data'
+        value = []
+#       puts "Array #{node}"
+        node.each_element('data/value') do |e|
+#         puts "recursive #{e}"
+          value << value2ruby(e)
+        end
+        value
       else
-	fail "value2ruby: Can't handle element '#{element.name}'"
+        fail "value2ruby: Can't handle element '#{element.name}'"
       end
     end
 
