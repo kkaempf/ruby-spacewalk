@@ -10,7 +10,7 @@ module Spacewalk
       when "string"
 	node.text
       when "struct"
-	raise "value2ruby: <member> not following <struct>" unless node[0].name == "member"
+	fail "value2ruby: <member> not following <struct>" unless node[0].name == "member"
 	value = {}
 	puts "Struct #{node}"
 	node.each_element("member") do |e|
@@ -20,7 +20,7 @@ module Spacewalk
 	end
 	value
       when "array"
-	raise "value2ruby: <data> not following <array>" unless node[0].name == "data"
+	fail "value2ruby: <data> not following <array>" unless node[0].name == "data"
 	value = []
 #	puts "Array #{node}"
 	node.each_element("data/value") do |e|
@@ -29,7 +29,7 @@ module Spacewalk
 	end
 	value
       else
-	raise "value2ruby: Can't handle element '#{element.name}'"
+	fail "value2ruby: Can't handle element '#{element.name}'"
       end
     end
 
@@ -48,9 +48,9 @@ module Spacewalk
       @doc.root.elements["params/param"]
 
       initialize config
-      raise "Expecting a Spacewalk::Config parameter to #{self.class}.new" unless config.is_a?(Spacewalk::Config)
+      fail "Expecting a Spacewalk::Config parameter to #{self.class}.new" unless config.is_a?(Spacewalk::Config)
       @path = config["systemIdPath"]
-      raise "systemIdPath is empty !" unless @path
+      fail "systemIdPath is empty !" unless @path
       @doc = REXML::Document.new(File.open(@path))
       @members = @doc.root.elements["params/param"]
     end

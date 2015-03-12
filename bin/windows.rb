@@ -132,7 +132,7 @@ class Windows
         packagekey = keymap[key.text]
         next unless packagekey
         type = types.shift
-        raise "sName #{key} has no type" unless type
+        fail "sName #{key} has no type" unless type
         reg_type = TYPES[type]
         method, valuename = case reg_type
           when :REG_SZ
@@ -146,7 +146,7 @@ class Windows
           when :REG_MULTI_SZ
             ["GetMultiStringValue","sValue"]     # multi string
           else
-            raise "Unknown type #{type}"
+            fail "Unknown type #{type}"
           end
         subproperties = {
           "hDefKey" => HKEYS[:HKEY_LOCAL_MACHINE].to_s,

@@ -85,7 +85,7 @@ if parms[:solv]
   require 'satsolver'
   pool = Satsolver::Pool.new
   repo = pool.add_solv( parms[:solv] )
-  raise "Invalid .solv file: #{parms[:solv]}" unless repo
+  fail "Invalid .solv file: #{parms[:solv]}" unless repo
 
   if parms[:yaml]
     require 'yaml'

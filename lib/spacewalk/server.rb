@@ -32,7 +32,7 @@ module Spacewalk
 	raise e unless e.message =~ /Wrong content-type/
       end
       response = @client.http_last_response
-      raise "XMLRPC failed with #{response.code}" unless response.code == "200"
+      fail "XMLRPC failed with #{response.code}" unless response.code == "200"
       body = response.body
       case response["content-type"]
       when "text/base64"
@@ -51,7 +51,7 @@ module Spacewalk
 	STDERR.puts "Unhandled content-encoding #{response['content-encoding']}"
       end
       ok, result = @client.get_parser.parseMethodResponse(body)
-      raise unless ok
+      fail unless ok
       result
     end
     public
@@ -67,7 +67,7 @@ module Spacewalk
       @config = Spacewalk::Config.new
       if options[:noconfig]
 	uri = URI.parse(options[:server])
- raise "Server '#{options[:server]}' is not proper URL" unless uri.host
+ fail "Server '#{options[:server]}' is not proper URL" unless uri.host
 	uri.path = "/XMLRPC"
       else
 	uri = URI.parse(@config.serverurl)
@@ -160,7 +160,7 @@ module Spacewalk
     # submit action result back to server
     #
     def submit_response(action_id, status, message, data)
-      raise "Data must be hash" unless data.is_a? Hash
+      fail "Data must be hash" unless data.is_a? Hash
       result = call "queue.submit", @systemid, action_id, status, message, data
     end
     #
