@@ -19,6 +19,7 @@ module Spacewalk
       end
       puts "SystemId => #{@members.inspect}"
     end
+
     def to_xml
       @raw
     end
