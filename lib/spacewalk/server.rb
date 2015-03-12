@@ -24,9 +24,7 @@ module Spacewalk
 #      puts "Call #{name}(#{args.inspect})"
       begin
 	# remove trailing nil values, nil is not supported in xmlrpc
-	while args.size > 0 && args[-1].nil?
-	  args.pop
-	end
+	args.pop while args.size > 0 && args[-1].nil?
 	result = @client.call(name, *args)
       rescue StandardError => e
 	raise e unless e.message =~ /Wrong content-type/
