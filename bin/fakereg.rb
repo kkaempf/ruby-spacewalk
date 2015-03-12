@@ -132,7 +132,7 @@ count.times do |i|
   begin
 
     # get "os_release","release_name","architecture"
-    name = '%s%04d' % [parms[:name], i]
+    name = format('%s%04d', parms[:name], i)
     print "Registering #{name}\n"
     systemid = server.register parms[:key], name, profile
     File.open("#{name}.systemid", 'w+') do |f|
