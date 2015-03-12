@@ -104,7 +104,7 @@ class Windows
 
     result.EnumKey_OUTPUT.each('sNames') do |node|
       puts "Node #{node.text.inspect}"
-      properties['sSubKeyName'] = uninstall_key + '\\' + CGI::escapeHTML(node.text)
+      properties['sSubKeyName'] = uninstall_key + '\\' + CGI.escapeHTML(node.text)
       puts "sSubKeyName >#{properties['sSubKeyName']}<"
       @wsopt.properties = properties
       method = 'EnumValues'
@@ -267,7 +267,7 @@ class Windows
       uri = part.ResourceURI.text
       selectors = {}
       part.SelectorSet.each do |sel|
-        selectors[sel.attr.to_s] = CGI::escapeHTML(sel.text)
+        selectors[sel.attr.to_s] = CGI.escapeHTML(sel.text)
       end
       @wsopt.selectors = selectors
       #

@@ -111,7 +111,7 @@ if parms[:solv]
 else
   if parms[:yaml]
     require 'yaml'
-    packages = YAML::load_file(parms[:yaml])
+    packages = YAML.load_file(parms[:yaml])
   else
     STDERR.puts 'No --solv and no --yaml given, skipping packages'
   end
