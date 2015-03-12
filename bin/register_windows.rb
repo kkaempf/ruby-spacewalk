@@ -27,14 +27,14 @@ end
 def parse_args
   require 'getoptlong'
   opts = GetoptLong.new(
-    [ "--help",        "-?",  GetoptLong::NO_ARGUMENT ],
-    [ "--server",      "-s",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--name",        "-n",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--description", "-d",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--key",         "-k",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--port",        "-p",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--arch",        "-a",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--solv",        "-S",  GetoptLong::REQUIRED_ARGUMENT ]
+    ["--help",        "-?",  GetoptLong::NO_ARGUMENT],
+    ["--server",      "-s",  GetoptLong::REQUIRED_ARGUMENT],
+    ["--name",        "-n",  GetoptLong::REQUIRED_ARGUMENT],
+    ["--description", "-d",  GetoptLong::REQUIRED_ARGUMENT],
+    ["--key",         "-k",  GetoptLong::REQUIRED_ARGUMENT],
+    ["--port",        "-p",  GetoptLong::REQUIRED_ARGUMENT],
+    ["--arch",        "-a",  GetoptLong::REQUIRED_ARGUMENT],
+    ["--solv",        "-S",  GetoptLong::REQUIRED_ARGUMENT]
   )
   result = {}
   opts.each do |opt, arg|

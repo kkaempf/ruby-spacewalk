@@ -31,9 +31,9 @@ end
 def parse_args
   require 'getoptlong'
   opts = GetoptLong.new(
-    [ "--help",        "-?",  GetoptLong::NO_ARGUMENT ],
-    [ "--server",      "-s",  GetoptLong::REQUIRED_ARGUMENT ],
-    [ "--future",      "-f",  GetoptLong::REQUIRED_ARGUMENT ]
+    ["--help",        "-?",  GetoptLong::NO_ARGUMENT],
+    ["--server",      "-s",  GetoptLong::REQUIRED_ARGUMENT],
+    ["--future",      "-f",  GetoptLong::REQUIRED_ARGUMENT]
   )
   result = {}
   opts.each do |opt, arg|
@@ -108,7 +108,7 @@ begin
   server = Spacewalk::Server.new :noconfig => true, :server => parms[:server], :systemid => systemid
   actions = parms[:future] ? server.future_actions(parms[:future].to_i) : server.actions
   if actions
-    actions = [ actions ] unless actions.is_a? Array
+    actions = [actions] unless actions.is_a? Array
     actions.each do |action|
       puts mk_promise action
       unless parms[:future]
