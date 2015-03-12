@@ -3,10 +3,10 @@
 #
 
 # for testing: prefer local path
-$: << File.expand_path(File.join(File.dirname(__FILE__),"..","lib"))
+$: << File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
 
 require "spacewalk"
-require File.expand_path(File.join(File.dirname(__FILE__),'windows'))
+require File.expand_path(File.join(File.dirname(__FILE__), 'windows'))
 
 #
 # Usage
@@ -37,7 +37,7 @@ def parse_args
     [ "--solv",        "-S",  GetoptLong::REQUIRED_ARGUMENT ]
   )
   result = {}
-  opts.each do |opt,arg|
+  opts.each do |opt, arg|
     result[opt[2..-1].to_sym] = arg
   end
   usage if result[:help]

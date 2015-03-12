@@ -136,15 +136,15 @@ class Windows
         reg_type = TYPES[type]
         method, valuename = case reg_type
           when :REG_SZ
-            ["GetStringValue","sValue"]          # string
+            ["GetStringValue", "sValue"]          # string
           when :REG_EXPAND_SZ
-            ["GetExpandedStringValue","sValue"]  # expanded string
+            ["GetExpandedStringValue", "sValue"]  # expanded string
           when :REG_BINARY
-            ["GetBinaryValue","uValue"]          # blob
+            ["GetBinaryValue", "uValue"]          # blob
           when :REG_DWORD
-            ["GetDWORDValue","uValue"]           # integer
+            ["GetDWORDValue", "uValue"]           # integer
           when :REG_MULTI_SZ
-            ["GetMultiStringValue","sValue"]     # multi string
+            ["GetMultiStringValue", "sValue"]     # multi string
           else
             fail "Unknown type #{type}"
           end
@@ -161,9 +161,9 @@ class Windows
       if time
         # convert Windows time (20101127) to Spacewalk-time (seconds since 1.1.1970)
         t = time.to_s
-        package["installtime"] = Time.local(t[0,4],t[4,2],t[6,2]).to_i
+        package["installtime"] = Time.local(t[0, 4], t[4, 2], t[6, 2]).to_i
       else
-        package["installtime"] = Time.local(1970,"Jan",1).to_i
+        package["installtime"] = Time.local(1970, "Jan", 1).to_i
       end
       package["version"] = "0" if package["version"].empty?
       package["release"] = "0" if package["release"].empty?

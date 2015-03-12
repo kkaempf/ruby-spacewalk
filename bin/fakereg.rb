@@ -3,7 +3,7 @@
 #
 
 # for testing: prefer local path
-$: << File.expand_path(File.join(File.dirname(__FILE__),"..","lib"))
+$: << File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
 
 require "spacewalk"
 
@@ -35,7 +35,7 @@ def parse_args
     [ "--count",       "-c",  GetoptLong::REQUIRED_ARGUMENT ]
   )
   result = {}
-  opts.each do |opt,arg|
+  opts.each do |opt, arg|
     result[opt[2..-1].to_sym] = arg
   end
   usage("No server url given") unless result[:server]
@@ -95,7 +95,7 @@ if parms[:solv]
       # somehow, YAML::dump(packages, f) does not work
       packages.each do |p|
         first = true
-        p.each do |k,v|
+        p.each do |k, v|
           if first
             f.puts "- #{k}: #{v.inspect}"
             first = false

@@ -37,7 +37,7 @@ class Client
 
     IO.popen("rpm -qa --queryformat \"%{name} %{epoch} %{version} %{release} %{arch} %{installtime}\n\"") do |io|
       io.each do |rpm|
-        name,epoch,version,release,arch,installtime = rpm.split(" ")
+        name, epoch, version, release, arch, installtime = rpm.split(" ")
         next if name == "gpg-pubkey"
         next if arch == "src"
         package = { "name" => name, "epoch" => epoch, "version" => version, "release" => release, "arch" => arch, "installtime" => installtime.to_i }
@@ -68,7 +68,7 @@ class Client
     File.open("/etc/os-release") do |f|
       f.each do |l|
         key, val = l.chomp.split("=")
-        val = val[1,-2] if val[0][1] == '"'
+        val = val[1, -2] if val[0][1] == '"'
         case key
         when "VERSION_ID"
           data["os_release"] = val
