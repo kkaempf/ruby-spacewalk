@@ -1,7 +1,7 @@
 module Spacewalk
   class Xmlrpc
     require 'rexml/document'
-private
+
     def self.value2ruby element
       puts "value2ruby element #{element}"
       node = element[0]
@@ -32,7 +32,7 @@ private
 	raise "value2ruby: Can't handle element '#{element.name}'"
       end
     end
-public
+
       # <params>
       #   <param>
       #     <value>
