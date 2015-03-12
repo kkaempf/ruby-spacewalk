@@ -7,8 +7,8 @@ module Spacewalk
 	while l = f.gets
 	  # split <name>=<value>, drop everything else
 	  next unless l =~ /(\w+)=(.*)/
-	  key = $1
-	  val = $2
+	  key = Regexp.last_match(1)
+	  val = Regexp.last_match(2)
 	  # fixme: handle array-type values
 	  @config[key.downcase] = val.empty? ? nil : val
 	end

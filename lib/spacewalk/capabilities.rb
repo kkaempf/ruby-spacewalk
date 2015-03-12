@@ -9,7 +9,7 @@ module Spacewalk
 #	  puts "#{cap}"
 	  raise "Invalid cap '#{cap}'" unless cap =~ /(\s+)?(((\w+)|\.)+)\((\d(-\d)?)\)=(\d)/
 	  # name = [ version, value ]
-	  @caps[$2] = [$5, $7]
+	  @caps[Regexp.last_match(2)] = [Regexp.last_match(5), Regexp.last_match(7)]
 #	  puts "#{$2}(#{$5})=#{$7}"
 	end
       end
