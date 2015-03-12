@@ -9,7 +9,7 @@ class Client
   #
   # Dump result as XML to file
   #
-  def dump klass, result
+  def dump(klass, result)
     File.open("#{klass}.xml", "w+") do |f|
       f.write result.to_xml
     end
@@ -18,7 +18,7 @@ class Client
   #
   # Constructor
   #
-  def initialize host
+  def initialize(host)
     @host = host
     @data = {}
   end

@@ -1,7 +1,7 @@
 module Spacewalk
   class SystemId
     require 'xmlrpc/client'
-    def initialize client, config
+    def initialize(client, config)
       raise "Expecting a Spacewalk::Config parameter to #{self.class}.new" unless config.is_a?(Spacewalk::Config)
       @path = config["systemIdPath"]
       raise "systemIdPath is empty !" unless @path

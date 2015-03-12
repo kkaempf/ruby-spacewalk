@@ -1,6 +1,6 @@
 module Spacewalk
   class Config
-    def initialize path="/etc/sysconfig/rhn/up2date"
+    def initialize(path="/etc/sysconfig/rhn/up2date")
       @path = path
       @config = {}
       File.open path do |f|
@@ -15,11 +15,11 @@ module Spacewalk
       end rescue nil
     end
     
-    def [] key
+    def [](key)
       @config[key.downcase]
     end
     
-    def method_missing name
+    def method_missing(name)
       @config[name.to_s.downcase]
     end
   end

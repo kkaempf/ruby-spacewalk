@@ -12,7 +12,7 @@ require File.expand_path(File.join(File.dirname(__FILE__),'windows'))
 # Usage
 #
 
-def usage msg=nil
+def usage(msg=nil)
   STDERR.puts "*** #{msg}" if msg
   STDERR.puts "Usage:"
   STDERR.puts "  register_windows --server <server> --key <activationkey> --name <name> --description <description> --solv <solv> --port <windows-port> --arch <arch> <windows-host>"

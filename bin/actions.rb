@@ -14,7 +14,7 @@ require File.expand_path(File.join(File.dirname(__FILE__),'client'))
 # Usage
 #
 
-def usage msg=nil
+def usage(msg=nil)
   STDERR.puts "*** #{msg}" if msg
   STDERR.puts "Usage:"
   STDERR.puts "  actions [<options>] <client-fqdn>"
@@ -53,7 +53,7 @@ end
 #  {"id"=>6434, "version"=>2, "action"=>["packages.remove", [[["accountsservice-devel", "0.6.38", "79.1", "", ""]]]]}
 #  {"id"=>6437, "version"=>2, "action"=>["packages.update", [[["aalib-devel", "1.4.0", "503.1.3", "", ""]]]]}
 # 
-def mk_promise action
+def mk_promise(action)
   id = action["id"]
   task, packages = action["action"]
   promise = "bundle agent "

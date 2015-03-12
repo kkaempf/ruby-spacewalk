@@ -1,7 +1,7 @@
 module Spacewalk
   class Capabilities
     # 
-    def initialize client
+    def initialize(client)
       # hash of <capability> => <version>
       @caps = {}
       client.http_last_response["x-rhn-server-capability"].split(",").each do |caps|

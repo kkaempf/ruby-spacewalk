@@ -14,7 +14,7 @@ require File.expand_path(File.join(File.dirname(__FILE__),'client'))
 # Usage
 #
 
-def usage msg=nil
+def usage(msg=nil)
   STDERR.puts "*** #{msg}" if msg
   STDERR.puts "Usage:"
   STDERR.puts "  register_remote [<options>] <client-fqdn>"

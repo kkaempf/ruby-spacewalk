@@ -14,7 +14,7 @@ require File.expand_path(File.join(File.dirname(__FILE__),'client'))
 # Usage
 #
 
-def usage msg=nil
+def usage(msg=nil)
   STDERR.puts "*** #{msg}" if msg
   STDERR.puts "Usage:"
   STDERR.puts "  submit [<options>] <client-fqdn>"
@@ -57,7 +57,7 @@ end
 # convert actions to promises
 # Actions => {"id"=>6434, "version"=>2, "action"=>["packages.remove", [[["accountsservice-devel", "0.6.38", "79.1", "", ""]]]]}
 # 
-def mk_promise _actions
+def mk_promise(_actions)
 end
 
 #------------------------------------

@@ -2,7 +2,7 @@ module Spacewalk
   class Xmlrpc
     require 'rexml/document'
 
-    def self.value2ruby element
+    def self.value2ruby(element)
       puts "value2ruby element #{element}"
       node = element[0]
       puts "value2ruby node #{node}"
@@ -44,7 +44,7 @@ module Spacewalk
       #     <value><string>...
       #     <value><array><data>...
       #
-    def self.decode _what
+    def self.decode(_what)
       @doc.root.elements["params/param"]
 
       initialize config

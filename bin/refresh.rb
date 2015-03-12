@@ -12,7 +12,7 @@ require File.expand_path(File.join(File.dirname(__FILE__),'windows'))
 # Usage
 #
 
-def usage msg
+def usage(msg)
   STDERR.puts "*** #{msg}" if msg
   STDERR.puts "Usage:"
   STDERR.puts "  refresh [--packages] [--hardware] --server <server> <host>"

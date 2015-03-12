@@ -11,7 +11,7 @@ require "spacewalk"
 # Usage
 #
 
-def usage msg
+def usage(msg)
   STDERR.puts "*** #{msg}" if msg
   STDERR.puts "Usage:"
   STDERR.puts "  fakereg --server <server> [--port <port>] --key <activationkey> [--description <description>] [--solv <solv> --yaml <yaml>] --arch <arch> --count <count> <name>"
@@ -48,7 +48,7 @@ end
 #
 # Convert Satsolver::Repo to profile list
 #
-def repo_packages repo
+def repo_packages(repo)
   packages = []
   repo.each do |p|
     entry = {}

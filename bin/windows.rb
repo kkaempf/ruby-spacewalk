@@ -24,13 +24,13 @@ class Windows
     7 => :REG_MULTI_SZ,     # multi string
   }
 
-  def dump klass, result
+  def dump(klass, result)
     File.open("#{klass}.xml", "w+") do |f|
       f.write result.to_xml
     end
   end
 
-  def initialize host, port = 5985
+  def initialize(host, port = 5985)
     @data = {}
     port ||= 5985 # if an explicit nil is passed
     @wsurl = "http://wsman:secret@#{host}:#{port}/wsman"
@@ -45,7 +45,7 @@ class Windows
     @wsopt.max_elements = 999
   end
 
-  def fault result = nil
+  def fault(result = nil)
     if result && result.fault?
       fault = Openwsman::Fault.new result
       STDERR.puts "Fault code #{fault.code}, subcode #{fault.subcode}"
@@ -195,7 +195,7 @@ class Windows
   #
   # Return hash of hashes { "<if-name>" : { ... }, ... }
   #
-  def network only_enabled=true
+  def network(only_enabled=true)
     netinterfaces = nil
     puts "Enumerating network configurations"
     uri = "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/"

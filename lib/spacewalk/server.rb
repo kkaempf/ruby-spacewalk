@@ -20,7 +20,7 @@ module Spacewalk
     require 'rexml/document'
 
     private
-    def call name, *args
+    def call(name, *args)
 #      puts "Call #{name}(#{args.inspect})"
       begin
 	# remove trailing nil values, nil is not supported in xmlrpc
@@ -63,7 +63,7 @@ module Spacewalk
     #  :server => string - url of server (for initial registration)
     #  :systemid => string
     #
-    def initialize options = {}
+    def initialize(options = {})
       @config = Spacewalk::Config.new
       if options[:noconfig]
 	uri = URI.parse(options[:server])
@@ -139,7 +139,7 @@ module Spacewalk
     #
     # time_window: (int) number of hours to look forward
     #
-    def future_actions time_window
+    def future_actions(time_window)
       time_window = time_window.to_i unless time_window.is_a? Fixnum
       report = Spacewalk::StatusReport.status
 #      puts "future_actions #{time_window}"
@@ -159,7 +159,7 @@ module Spacewalk
     #
     # submit action result back to server
     #
-    def submit_response action_id, status, message, data
+    def submit_response(action_id, status, message, data)
       raise "Data must be hash" unless data.is_a? Hash
       result = call "queue.submit", @systemid, action_id, status, message, data
     end
@@ -167,7 +167,7 @@ module Spacewalk
     # register with activation key
     # profile_name is hash of "os_release" => version, "release_name" => name, "architecture" => arch }
     #
-    def register activationkey, profile_name, other = {}
+    def register(activationkey, profile_name, other = {})
       auth_dict = {}
       auth_dict["profile_name"] = profile_name
       # dict of other bits to send
@@ -184,13 +184,13 @@ module Spacewalk
     #
     # send package list to server
     #
-    def send_packages packages
+    def send_packages(packages)
       call "registration.add_packages", @systemid, packages
     end
     #
     # send hardware details to server
     #
-    def refresh_hardware devices
+    def refresh_hardware(devices)
       call "registration.refresh_hw_profile", @systemid, devices
     end
   end
