@@ -9,7 +9,7 @@ module Spacewalk
 	  next unless l =~ /(\w+)=(.*)/
 	  key = Regexp.last_match(1)
 	  val = Regexp.last_match(2)
-	  # fixme: handle array-type values
+	  # FIXME: handle array-type values
 	  @config[key.downcase] = val.empty? ? nil : val
 	end
       end rescue nil
