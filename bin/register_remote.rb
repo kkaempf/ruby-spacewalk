@@ -27,7 +27,7 @@ def usage msg=nil
   STDERR.puts "    --solv <solv-file>"
   STDERR.puts "    --arch <arch>"
   STDERR.puts "Does a registration of a 'remote' client system"
-  exit (msg ? 1 : 0)
+  exit(msg ? 1 : 0)
 end
 
 #

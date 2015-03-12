@@ -21,7 +21,7 @@ def usage msg=nil
   STDERR.puts "    --server <spacewalk-server-url>"
   STDERR.puts "    --future <hours>"
   STDERR.puts "Checks server for client actions"
-  exit (msg ? 1 : 0)
+  exit(msg ? 1 : 0)
 end
 
 #

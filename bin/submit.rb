@@ -23,7 +23,7 @@ def usage msg=nil
   STDERR.puts "    --message <message>"
   STDERR.puts "    --result <result>"
   STDERR.puts "Submit action status back to server"
-  exit (msg ? 1 : 0)
+  exit(msg ? 1 : 0)
 end
 
 #
