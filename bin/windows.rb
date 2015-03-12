@@ -297,7 +297,7 @@ class Windows
         end
       end
       if net_if
-        hw << net_if.merge({ 'class' => 'netinterfaces' })
+        hw << net_if.merge('class' => 'netinterfaces')
       end
     end
 
