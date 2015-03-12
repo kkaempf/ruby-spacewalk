@@ -44,7 +44,7 @@ public
       #     <value><string>...
       #     <value><array><data>...
       #
-    def self.decode what
+    def self.decode _what
       @doc.root.elements["params/param"]
 
       initialize config
