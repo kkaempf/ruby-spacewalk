@@ -19,7 +19,7 @@ module Spacewalk
     require 'base64'
     require 'rexml/document'
 
-private
+    private
     def call name, *args
 #      puts "Call #{name}(#{args.inspect})"
       begin
@@ -54,7 +54,7 @@ private
       raise unless ok
       result
     end
-public
+    public
 
     #
     # Initialize server xmlrpc port
