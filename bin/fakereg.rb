@@ -65,7 +65,7 @@ end
 
 def fake_profile
   # assemble registration information
-  
+
   data = {}
   data['os_release'] = 'Fake testing'
   data['release_name'] = 'ruby-spacewalk'
@@ -130,7 +130,7 @@ server = Spacewalk::Server.new :noconfig => true, :server => parms[:server]
 
 count.times do |i|
   begin
-    
+
     # get "os_release","release_name","architecture"
     name = '%s%04d' % [parms[:name], i]
     print "Registering #{name}\n"

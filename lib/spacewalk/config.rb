@@ -14,11 +14,11 @@ module Spacewalk
 	end
       end rescue nil
     end
-    
+
     def [](key)
       @config[key.downcase]
     end
-    
+
     def method_missing(name)
       @config[name.to_s.downcase]
     end

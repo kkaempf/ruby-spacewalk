@@ -45,10 +45,10 @@ class Client
         packages << package
       end
     end
-    
+
     packages
   end
-  
+
   def profile
 
     # assemble registration information

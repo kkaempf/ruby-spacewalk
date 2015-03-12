@@ -5,7 +5,7 @@ module XMLRPC
     end
   end
 end
-                                                         
+
 module Spacewalk
   class Server
     # from /usr/sbin/rhn_check
@@ -40,7 +40,7 @@ module Spacewalk
       when 'text/xml'
 	# fallthru
       else
-        STDERR.puts "Unhandled content-type #{response['content-type']}"	
+        STDERR.puts "Unhandled content-type #{response['content-type']}"
       end
       case response['content-encoding']
       when 'x-zlib'

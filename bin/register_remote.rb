@@ -115,7 +115,7 @@ begin
     packages = client.packages
     server.send_packages packages
   end
-  
+
 #  if parms[:hardware]
 #    hardware = client.hardware
 #    server.refresh_hardware hardware

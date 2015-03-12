@@ -65,7 +65,7 @@ end
 
 def fake_profile
   # assemble registration information
-  
+
   data = {}
   data['os_release'] = 'Fake testing'
   data['release_name'] = 'ruby-spacewalk'

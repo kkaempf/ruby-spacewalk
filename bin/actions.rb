@@ -52,7 +52,7 @@ end
 # convert action to promises
 #  {"id"=>6434, "version"=>2, "action"=>["packages.remove", [[["accountsservice-devel", "0.6.38", "79.1", "", ""]]]]}
 #  {"id"=>6437, "version"=>2, "action"=>["packages.update", [[["aalib-devel", "1.4.0", "503.1.3", "", ""]]]]}
-# 
+#
 def mk_promise(action)
   id = action['id']
   task, packages = action['action']
@@ -102,7 +102,7 @@ fqdn = parms[:fqdn]
 unless File.exist? fqdn
   STDERR.puts "#{fqdn} must be registered first"
 end
-    
+
 begin
   systemid = File.open(fqdn).read
   server = Spacewalk::Server.new :noconfig => true, :server => parms[:server], :systemid => systemid
@@ -115,7 +115,7 @@ begin
         server.submit_response parms[:action], '0', 'Action converted to promise', { }
       end
     end
-  end 
+  end
 rescue
   raise
 end

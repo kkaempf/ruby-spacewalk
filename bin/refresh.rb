@@ -29,7 +29,7 @@ def parse_args
     ['--port',   '-P', GetoptLong::REQUIRED_ARGUMENT],
     ['--server',   '-s', GetoptLong::REQUIRED_ARGUMENT],
     ['--packages', '-p', GetoptLong::NO_ARGUMENT],
-    ['--hardware',  '-h', GetoptLong::NO_ARGUMENT]    
+    ['--hardware',  '-h', GetoptLong::NO_ARGUMENT]
   )
   result = {}
   opts.each do |opt, arg|
@@ -71,12 +71,12 @@ begin
     packages = windows.packages
 #    server.send_packages packages
   end
-  
+
   if parms[:hardware]
     hardware = windows.hardware
     server.refresh_hardware hardware
   end
-  
+
 rescue
   raise
 end

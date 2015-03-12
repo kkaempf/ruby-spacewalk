@@ -56,7 +56,7 @@ end
 
 # convert actions to promises
 # Actions => {"id"=>6434, "version"=>2, "action"=>["packages.remove", [[["accountsservice-devel", "0.6.38", "79.1", "", ""]]]]}
-# 
+#
 def mk_promise(_actions)
 end
 
@@ -80,7 +80,7 @@ fqdn = parms[:fqdn]
 unless File.exist? fqdn
   STDERR.puts "#{fqdn} must be registered first"
 end
-    
+
 begin
   systemid = File.open(fqdn).read
   server = Spacewalk::Server.new :noconfig => true, :server => parms[:server], :systemid => systemid

@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{A pure-Ruby implementation of the Spacewalk client side}
   s.description = %q{Can be used for testing or to attach 'foreign'
 systems}
-  
+
   s.rubyforge_project = 'spacewalk'
 
   s.add_development_dependency('rake')

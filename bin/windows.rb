@@ -40,7 +40,7 @@ class Windows
     @wsopt = Openwsman::ClientOptions.new
 #    @wsopt.set_dump_request
 #    Openwsman.debug = -1
-    
+
     @wsopt.flags = Openwsman::FLAG_ENUMERATION_OPTIMIZATION
     @wsopt.max_elements = 999
   end
@@ -70,7 +70,7 @@ class Windows
     # StdRegProv is a Singleton, no selectors needed
     #
     # options.add_selector( "key", value )
-    
+
     # Properties add method parameters
     # (Marked with [in] in method definitions)
     #
@@ -84,7 +84,7 @@ class Windows
       'sSubKeyName' => uninstall_key
     }
     @wsopt.properties = properties
-    @wsopt.set_dump_request    
+    @wsopt.set_dump_request
     # Name of method invoked on the class (resp. instrance)
     method = 'EnumKey'
     result = @wsman.invoke(@wsopt, uri, method)
@@ -120,7 +120,7 @@ class Windows
       subresult.Types.each do |key|
         types << key.text.to_i
       end
-    
+
       package = {
         'name' => node.text,
         'epoch' => '',
@@ -169,10 +169,10 @@ class Windows
       package['release'] = '0' if package['release'].empty?
       packages << package
     end
-    
+
     packages
   end
-  
+
   def bios
     puts 'Checking the BIOS'
     uri = 'http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/'
@@ -186,7 +186,7 @@ class Windows
     result['smbios.system.serial'] = bios.SerialNumber
     result['smbios.system.manufacturer'] = bios.Manufacturer
     result['smbios.system.product'] = bios.Name
-#    result["smbios.system.uuid"] = 
+#    result["smbios.system.uuid"] =
     result
   end
 
@@ -215,7 +215,7 @@ class Windows
         @data['IPAddress'] = node.IPAddress.text
       end
       netinterfaces ||= {}
-      netinterfaces["net#{node.Index}"] = { 
+      netinterfaces["net#{node.Index}"] = {
         'hwaddr' => node.MACAddress.text,
         'module' => node.ServiceName.text,
         'broadcast' => '255.255.255.255', # FIXME, compute from ip+subnet
@@ -300,7 +300,7 @@ class Windows
         hw << net_if.merge({ 'class' => 'netinterfaces' })
       end
     end
-    
+
     @wsopt.selectors = {}
     puts "#{count} devices"
     hw
@@ -321,7 +321,7 @@ class Windows
     # os.each do |node|
     #  puts "  #{node.name}:\t#{node.text}"
     # end
-  
+
       puts 'Asking for computer system'
       klass = 'Win32_ComputerSystem'
       result = @wsman.enumerate(@wsopt, nil, uri + klass)
@@ -339,7 +339,7 @@ class Windows
       fault result
       return {}
     end
-    
+
     puts 'Assembling Windows profile'
 
     # assemble registration information

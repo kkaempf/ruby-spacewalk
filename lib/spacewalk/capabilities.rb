@@ -1,6 +1,6 @@
 module Spacewalk
   class Capabilities
-    # 
+    #
     def initialize(client)
       # hash of <capability> => <version>
       @caps = {}
