@@ -9,12 +9,12 @@ require 'cgi'
 class Windows
   # mapping for Registry 'root' pointers
   HKEYS = {
-    :HKEY_CLASSES_ROOT   => 2147483648, # (0x80000000)
-    :HKEY_CURRENT_USER   => 2147483649, # (0x80000001)
-    :HKEY_LOCAL_MACHINE  => 2147483650, # (0x80000002)
-    :HKEY_USERS          => 2147483651, # (0x80000003)
-    :HKEY_CURRENT_CONFIG => 2147483653, # (0x80000005)
-    :HKEY_DYN_DATA       => 2147483654 # (0x80000006)
+    :HKEY_CLASSES_ROOT   => 2_147_483_648, # (0x80000000)
+    :HKEY_CURRENT_USER   => 2_147_483_649, # (0x80000001)
+    :HKEY_LOCAL_MACHINE  => 2_147_483_650, # (0x80000002)
+    :HKEY_USERS          => 2_147_483_651, # (0x80000003)
+    :HKEY_CURRENT_CONFIG => 2_147_483_653, # (0x80000005)
+    :HKEY_DYN_DATA       => 2_147_483_654 # (0x80000006)
   }
   TYPES = {
     1 => :REG_SZ,           # string
