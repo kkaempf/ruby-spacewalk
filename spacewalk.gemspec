@@ -10,9 +10,9 @@ Gem::Specification.new do |s|
   s.authors     = ['Klaus Kämpf']
   s.email       = ['kkaempf@suse.de']
   s.homepage    = 'https://github.com/kkaempf/ruby-spacewalk'
-  s.summary     = %q{A pure-Ruby implementation of the Spacewalk client side}
-  s.description = %q{Can be used for testing or to attach 'foreign'
-systems}
+  s.summary     = 'A pure-Ruby implementation of the Spacewalk client side'
+  s.description = "Can be used for testing or to attach 'foreign'
+systems"
 
   s.rubyforge_project = 'spacewalk'
 
