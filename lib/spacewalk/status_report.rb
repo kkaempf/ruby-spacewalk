@@ -8,7 +8,7 @@ module Spacewalk
       status["uname"] = [`uname -s`.chomp, `uname -n`.chomp, `uname -r`.chomp, `uname -v`.chomp, `uname -m`.chomp]
       begin
 	File.open("/proc/uptime") do |f|
-	  status["uptime"] = f.read.split(" ").map{|v| v.to_i}
+	  status["uptime"] = f.read.split(" ").map{ |v| v.to_i }
 	end
       rescue
 	nil
