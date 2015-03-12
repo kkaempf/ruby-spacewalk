@@ -1,4 +1,4 @@
-$: << File.dirname(__FILE__)
+$LOAD_PATH << File.dirname(__FILE__)
 require 'spacewalk/config'
 require 'spacewalk/system_id'
 require 'spacewalk/capabilities'

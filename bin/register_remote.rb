@@ -5,7 +5,7 @@
 #
 
 # for testing: prefer local path
-$: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'spacewalk'
 require File.expand_path(File.join(File.dirname(__FILE__), 'client'))

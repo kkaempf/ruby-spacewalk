@@ -82,7 +82,7 @@ class Client
 
 end # client
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
   client = Client.new '1.1.1.1'
   puts client.packages.inspect
 end
