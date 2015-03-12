@@ -3,9 +3,9 @@
 #
 
 # for testing: prefer local path
-$: << File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+$: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
-require "spacewalk"
+require 'spacewalk'
 require File.expand_path(File.join(File.dirname(__FILE__), 'windows'))
 
 #
@@ -14,8 +14,8 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'windows'))
 
 def usage(msg)
   STDERR.puts "*** #{msg}" if msg
-  STDERR.puts "Usage:"
-  STDERR.puts "  refresh [--packages] [--hardware] --server <server> <host>"
+  STDERR.puts 'Usage:'
+  STDERR.puts '  refresh [--packages] [--hardware] --server <server> <host>'
   exit(msg ? 1 : 0)
 end
 
@@ -26,19 +26,19 @@ end
 def parse_args
   require 'getoptlong'
   opts = GetoptLong.new(
-    ["--port",   "-P", GetoptLong::REQUIRED_ARGUMENT],
-    ["--server",   "-s", GetoptLong::REQUIRED_ARGUMENT],
-    ["--packages", "-p", GetoptLong::NO_ARGUMENT],
-    ["--hardware",  "-h", GetoptLong::NO_ARGUMENT]    
+    ['--port',   '-P', GetoptLong::REQUIRED_ARGUMENT],
+    ['--server',   '-s', GetoptLong::REQUIRED_ARGUMENT],
+    ['--packages', '-p', GetoptLong::NO_ARGUMENT],
+    ['--hardware',  '-h', GetoptLong::NO_ARGUMENT]    
   )
   result = {}
   opts.each do |opt, arg|
     result[opt[2..-1].to_sym] = arg
   end
-  usage("No server url given") unless result[:server]
-  usage("No <host> given") if ARGV.empty?
+  usage('No server url given') unless result[:server]
+  usage('No <host> given') if ARGV.empty?
   result[:fqdn] = ARGV.shift
-  usage("Multiple <host>s given") unless ARGV.empty?
+  usage('Multiple <host>s given') unless ARGV.empty?
   result
 end
 

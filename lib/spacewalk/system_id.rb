@@ -3,8 +3,8 @@ module Spacewalk
     require 'xmlrpc/client'
     def initialize(client, config)
       fail "Expecting a Spacewalk::Config parameter to #{self.class}.new" unless config.is_a?(Spacewalk::Config)
-      @path = config["systemIdPath"]
-      fail "systemIdPath is empty !" unless @path
+      @path = config['systemIdPath']
+      fail 'systemIdPath is empty !' unless @path
       # <params>
       #   <param>
       #     <value>

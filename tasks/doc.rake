@@ -5,10 +5,10 @@ begin
    t.options = ['--no-private']
  end
 rescue LoadError
-  STDERR.puts "Install yard if you want prettier docs"
+  STDERR.puts 'Install yard if you want prettier docs'
   require 'rdoc/task'
   Rake::RDocTask.new(:doc) do |rdoc|
-    rdoc.rdoc_dir = "doc"
+    rdoc.rdoc_dir = 'doc'
     rdoc.title = "Spacewalk #{Spacewalk::VERSION}"
   end
 end

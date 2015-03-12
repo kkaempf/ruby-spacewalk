@@ -1,6 +1,6 @@
 module Spacewalk
   class Config
-    def initialize(path="/etc/sysconfig/rhn/up2date")
+    def initialize(path='/etc/sysconfig/rhn/up2date')
       @path = path
       @config = {}
       File.open path do |f|

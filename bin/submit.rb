@@ -5,9 +5,9 @@
 #
 
 # for testing: prefer local path
-$: << File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+$: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
-require "spacewalk"
+require 'spacewalk'
 require File.expand_path(File.join(File.dirname(__FILE__), 'client'))
 
 #
@@ -16,13 +16,13 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'client'))
 
 def usage(msg=nil)
   STDERR.puts "*** #{msg}" if msg
-  STDERR.puts "Usage:"
-  STDERR.puts "  submit [<options>] <client-fqdn>"
-  STDERR.puts "    --server <spacewalk-server-url>"
-  STDERR.puts "    --action <action-id>"
-  STDERR.puts "    --message <message>"
-  STDERR.puts "    --result <result>"
-  STDERR.puts "Submit action status back to server"
+  STDERR.puts 'Usage:'
+  STDERR.puts '  submit [<options>] <client-fqdn>'
+  STDERR.puts '    --server <spacewalk-server-url>'
+  STDERR.puts '    --action <action-id>'
+  STDERR.puts '    --message <message>'
+  STDERR.puts '    --result <result>'
+  STDERR.puts 'Submit action status back to server'
   exit(msg ? 1 : 0)
 end
 
@@ -33,23 +33,23 @@ end
 def parse_args
   require 'getoptlong'
   opts = GetoptLong.new(
-    ["--help",        "-?",  GetoptLong::NO_ARGUMENT],
-    ["--server",      "-s",  GetoptLong::REQUIRED_ARGUMENT],
-    ["--action",      "-a",  GetoptLong::REQUIRED_ARGUMENT],
-    ["--message",     "-m",  GetoptLong::REQUIRED_ARGUMENT],
-    ["--result",      "-r",  GetoptLong::REQUIRED_ARGUMENT]
+    ['--help',        '-?',  GetoptLong::NO_ARGUMENT],
+    ['--server',      '-s',  GetoptLong::REQUIRED_ARGUMENT],
+    ['--action',      '-a',  GetoptLong::REQUIRED_ARGUMENT],
+    ['--message',     '-m',  GetoptLong::REQUIRED_ARGUMENT],
+    ['--result',      '-r',  GetoptLong::REQUIRED_ARGUMENT]
   )
   result = {}
   opts.each do |opt, arg|
     result[opt[2..-1].to_sym] = arg
   end
   usage if result[:help]
-  usage("No server url given") unless result[:server]
-  usage("No action id given") unless result[:action]
+  usage('No server url given') unless result[:server]
+  usage('No action id given') unless result[:action]
   unless result[:solv]
-    usage("No <client-fqdn> given") if ARGV.empty?
+    usage('No <client-fqdn> given') if ARGV.empty?
     result[:fqdn] = ARGV.shift
-    usage("Multiple <client-fqdn>s given") unless ARGV.empty?
+    usage('Multiple <client-fqdn>s given') unless ARGV.empty?
   end
   result
 end
@@ -84,7 +84,7 @@ end
 begin
   systemid = File.open(fqdn).read
   server = Spacewalk::Server.new :noconfig => true, :server => parms[:server], :systemid => systemid
-  server.submit_response parms[:action], "0", parms[:message], { }
+  server.submit_response parms[:action], '0', parms[:message], { }
 rescue
   raise
 end

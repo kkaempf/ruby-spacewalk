@@ -12,7 +12,7 @@ module Spacewalk
     # action version we understand
     ACTION_VERSION = 2
 
-    require "xmlrpc/client"
+    require 'xmlrpc/client'
     require 'openssl'
     require 'uri'
     require 'zlib'
@@ -32,18 +32,18 @@ module Spacewalk
 	raise e unless e.message =~ /Wrong content-type/
       end
       response = @client.http_last_response
-      fail "XMLRPC failed with #{response.code}" unless response.code == "200"
+      fail "XMLRPC failed with #{response.code}" unless response.code == '200'
       body = response.body
-      case response["content-type"]
-      when "text/base64"
+      case response['content-type']
+      when 'text/base64'
 	body = Base64.decode64(body)
-      when "text/xml"
+      when 'text/xml'
 	# fallthru
       else
         STDERR.puts "Unhandled content-type #{response['content-type']}"	
       end
-      case response["content-encoding"]
-      when "x-zlib"
+      case response['content-encoding']
+      when 'x-zlib'
 	body = Zlib::Inflate.inflate(body)
       when nil
 	# fallthru
@@ -68,30 +68,30 @@ module Spacewalk
       if options[:noconfig]
 	uri = URI.parse(options[:server])
  fail "Server '#{options[:server]}' is not proper URL" unless uri.host
-	uri.path = "/XMLRPC"
+	uri.path = '/XMLRPC'
       else
 	uri = URI.parse(@config.serverurl)
       end
 
-      args = {:host => uri.host, :path => uri.path, :use_ssl => (uri.scheme == "https"), :timeout => 120 }
+      args = {:host => uri.host, :path => uri.path, :use_ssl => (uri.scheme == 'https'), :timeout => 120 }
 
       unless options[:noconfig]
 	if @config.httpProxy
-	  args[:proxy_host], clientargs[:proxy_port] = @config.httpProxy.split ":"
+	  args[:proxy_host], clientargs[:proxy_port] = @config.httpProxy.split ':'
 	end
       end
 
       @client = XMLRPC::Client.new_from_hash args
 
       @client.http_header_extra = {}
-      @client.instance_variable_get("@http").verify_mode = OpenSSL::SSL::VERIFY_NONE
+      @client.instance_variable_get('@http').verify_mode = OpenSSL::SSL::VERIFY_NONE
       welcome
 
       # parse server capabilities
       @capabilities = Spacewalk::Capabilities.new @client
 
-      @client.http_header_extra["X-Up2date-Version"] = "1.6.42" # from rhn-client-tools.spec
-      @client.http_header_extra["X-RHN-Client-Capability"] = "packages.extended_profile(2)=1"
+      @client.http_header_extra['X-Up2date-Version'] = '1.6.42' # from rhn-client-tools.spec
+      @client.http_header_extra['X-RHN-Client-Capability'] = 'packages.extended_profile(2)=1'
       @systemid = options[:systemid]
       unless @systemid || options[:noconfig]
         @systemid = Spacewalk::SystemId.new(@client, @config).to_xml
@@ -104,7 +104,7 @@ module Spacewalk
 
     # welcome to/from server
     def welcome
-      result = call "registration.welcome_message"
+      result = call 'registration.welcome_message'
 #      puts "Welcome => #{result.inspect}"
     end
 
@@ -124,12 +124,12 @@ module Spacewalk
 #      puts "report => #{report.inspect}"
 #      puts "@systemid => #{@systemid.inspect}"
 
-      result = call "queue.get", @systemid, ACTION_VERSION, report
+      result = call 'queue.get', @systemid, ACTION_VERSION, report
 #      puts "queue.get  => #{result.inspect}"
 
-      action = result["action"]
+      action = result['action']
       if action
-	result["action"] = @client.get_parser.parseMethodCall(action)
+	result['action'] = @client.get_parser.parseMethodCall(action)
       end
 #      puts "Actions => #{result.inspect}"
     end
@@ -144,12 +144,12 @@ module Spacewalk
       report = Spacewalk::StatusReport.status
 #      puts "future_actions #{time_window}"
 
-      results = call "queue.get_future_actions", @systemid, time_window
+      results = call 'queue.get_future_actions', @systemid, time_window
 #      puts "queue.get_future_actions  => #{results.inspect}"
       results.map! do |result|
-        action = result["action"]
+        action = result['action']
         if action
-          result["action"] = @client.get_parser.parseMethodCall(action)
+          result['action'] = @client.get_parser.parseMethodCall(action)
         end
         result
       end
@@ -160,8 +160,8 @@ module Spacewalk
     # submit action result back to server
     #
     def submit_response(action_id, status, message, data)
-      fail "Data must be hash" unless data.is_a? Hash
-      result = call "queue.submit", @systemid, action_id, status, message, data
+      fail 'Data must be hash' unless data.is_a? Hash
+      result = call 'queue.submit', @systemid, action_id, status, message, data
     end
     #
     # register with activation key
@@ -169,29 +169,29 @@ module Spacewalk
     #
     def register(activationkey, profile_name, other = {})
       auth_dict = {}
-      auth_dict["profile_name"] = profile_name
+      auth_dict['profile_name'] = profile_name
       # dict of other bits to send
       auth_dict.update other
-      auth_dict["token"] = activationkey
+      auth_dict['token'] = activationkey
       # auth_dict["username"] = username
       # auth_dict["password"] = password
 
       # if cfg['supportsSMBIOS']:
       #	auth_dict["smbios"] = _encode_characters(hardware.get_smbios())
 #      STDERR.puts "registration.new_system #{auth_dict.inspect}"
-      @systemid = call "registration.new_system", auth_dict
+      @systemid = call 'registration.new_system', auth_dict
     end
     #
     # send package list to server
     #
     def send_packages(packages)
-      call "registration.add_packages", @systemid, packages
+      call 'registration.add_packages', @systemid, packages
     end
     #
     # send hardware details to server
     #
     def refresh_hardware(devices)
-      call "registration.refresh_hw_profile", @systemid, devices
+      call 'registration.refresh_hw_profile', @systemid, devices
     end
   end
 end

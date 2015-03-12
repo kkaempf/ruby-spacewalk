@@ -5,9 +5,9 @@
 #
 
 # for testing: prefer local path
-$: << File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+$: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
-require "spacewalk"
+require 'spacewalk'
 require File.expand_path(File.join(File.dirname(__FILE__), 'client'))
 
 #
@@ -16,11 +16,11 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'client'))
 
 def usage(msg=nil)
   STDERR.puts "*** #{msg}" if msg
-  STDERR.puts "Usage:"
-  STDERR.puts "  actions [<options>] <client-fqdn>"
-  STDERR.puts "    --server <spacewalk-server-url>"
-  STDERR.puts "    --future <hours>"
-  STDERR.puts "Checks server for client actions"
+  STDERR.puts 'Usage:'
+  STDERR.puts '  actions [<options>] <client-fqdn>'
+  STDERR.puts '    --server <spacewalk-server-url>'
+  STDERR.puts '    --future <hours>'
+  STDERR.puts 'Checks server for client actions'
   exit(msg ? 1 : 0)
 end
 
@@ -31,20 +31,20 @@ end
 def parse_args
   require 'getoptlong'
   opts = GetoptLong.new(
-    ["--help",        "-?",  GetoptLong::NO_ARGUMENT],
-    ["--server",      "-s",  GetoptLong::REQUIRED_ARGUMENT],
-    ["--future",      "-f",  GetoptLong::REQUIRED_ARGUMENT]
+    ['--help',        '-?',  GetoptLong::NO_ARGUMENT],
+    ['--server',      '-s',  GetoptLong::REQUIRED_ARGUMENT],
+    ['--future',      '-f',  GetoptLong::REQUIRED_ARGUMENT]
   )
   result = {}
   opts.each do |opt, arg|
     result[opt[2..-1].to_sym] = arg
   end
   usage if result[:help]
-  usage("No server url given") unless result[:server]
+  usage('No server url given') unless result[:server]
   unless result[:solv]
-    usage("No <client-fqdn> given") if ARGV.empty?
+    usage('No <client-fqdn> given') if ARGV.empty?
     result[:fqdn] = ARGV.shift
-    usage("Multiple <client-fqdn>s given") unless ARGV.empty?
+    usage('Multiple <client-fqdn>s given') unless ARGV.empty?
   end
   result
 end
@@ -54,16 +54,16 @@ end
 #  {"id"=>6437, "version"=>2, "action"=>["packages.update", [[["aalib-devel", "1.4.0", "503.1.3", "", ""]]]]}
 # 
 def mk_promise(action)
-  id = action["id"]
-  task, packages = action["action"]
-  promise = "bundle agent "
+  id = action['id']
+  task, packages = action['action']
+  promise = 'bundle agent '
   case task
-  when "packages.remove"
-    promise << "mgr_remove"
-    policy = "add"
-  when "packages.update"
-    promise << "mgr_update"
-    policy = "remove"
+  when 'packages.remove'
+    promise << 'mgr_remove'
+    policy = 'add'
+  when 'packages.update'
+    promise << 'mgr_update'
+    policy = 'remove'
   else
     fail "Task '#{task}' not supported"
   end
@@ -71,7 +71,7 @@ def mk_promise(action)
   first = true
   packages[0].each do |package|
     name, version, release, epoch, arch = package
-    promise << ", " unless first
+    promise << ', ' unless first
     first = false
     promise << "\"#{name}-#{version}-#{release}\""
   end
@@ -112,7 +112,7 @@ begin
     actions.each do |action|
       puts mk_promise action
       unless parms[:future]
-        server.submit_response parms[:action], "0", "Action converted to promise", { }
+        server.submit_response parms[:action], '0', 'Action converted to promise', { }
       end
     end
   end 

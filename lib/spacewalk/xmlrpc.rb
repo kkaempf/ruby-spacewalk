@@ -7,23 +7,23 @@ module Spacewalk
       node = element[0]
       puts "value2ruby node #{node}"
       case node.name
-      when "string"
+      when 'string'
 	node.text
-      when "struct"
-	fail "value2ruby: <member> not following <struct>" unless node[0].name == "member"
+      when 'struct'
+	fail 'value2ruby: <member> not following <struct>' unless node[0].name == 'member'
 	value = {}
 	puts "Struct #{node}"
-	node.each_element("member") do |e|
-	  name = e.elements["member/name"].text
-	  v = value2ruby m.elements["member/value"]
+	node.each_element('member') do |e|
+	  name = e.elements['member/name'].text
+	  v = value2ruby m.elements['member/value']
 	  value[name] = v
 	end
 	value
-      when "array"
-	fail "value2ruby: <data> not following <array>" unless node[0].name == "data"
+      when 'array'
+	fail 'value2ruby: <data> not following <array>' unless node[0].name == 'data'
 	value = []
 #	puts "Array #{node}"
-	node.each_element("data/value") do |e|
+	node.each_element('data/value') do |e|
 #	  puts "recursive #{e}"
 	  value << value2ruby(e)
 	end
@@ -45,14 +45,14 @@ module Spacewalk
       #     <value><array><data>...
       #
     def self.decode(_what)
-      @doc.root.elements["params/param"]
+      @doc.root.elements['params/param']
 
       initialize config
       fail "Expecting a Spacewalk::Config parameter to #{self.class}.new" unless config.is_a?(Spacewalk::Config)
-      @path = config["systemIdPath"]
-      fail "systemIdPath is empty !" unless @path
+      @path = config['systemIdPath']
+      fail 'systemIdPath is empty !' unless @path
       @doc = REXML::Document.new(File.open(@path))
-      @members = @doc.root.elements["params/param"]
+      @members = @doc.root.elements['params/param']
     end
   end
 end
