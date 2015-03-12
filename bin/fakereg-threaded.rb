@@ -150,5 +150,5 @@ puts "Waiting for threads"
 threads.each { |t| t.join }
 
 stop = Time.now
-elapsed = stop-start
-puts "Registered #{good} of #{count} systems in #{elapsed} seconds (#{good/elapsed} systems/sec)"
+elapsed = stop - start
+puts "Registered #{good} of #{count} systems in #{elapsed} seconds (#{good / elapsed} systems/sec)"

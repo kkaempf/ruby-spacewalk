@@ -104,7 +104,7 @@ begin
     puts "Must register"
     usage("No activationkey given") unless parms[:key]
     puts "Registering"
-    systemid = server.register parms[:key], parms[:name]||fqdn, profile
+    systemid = server.register parms[:key], parms[:name] || fqdn, profile
     File.open(fqdn, "w+") do |f|
       f.write systemid
     end

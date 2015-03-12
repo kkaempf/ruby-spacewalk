@@ -177,7 +177,7 @@ class Windows
     puts "Checking the BIOS"
     uri = "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/"
     klass = "Win32_BIOS"
-    result = @wsman.enumerate( @wsopt, nil, uri+klass)
+    result = @wsman.enumerate( @wsopt, nil, uri + klass)
     bios = result.body.EnumerateResponse.Items.send(klass.to_sym)
 #    dump klass, result
     return nil unless bios.SMBIOSPresent.to_s == "true"
@@ -200,7 +200,7 @@ class Windows
     puts "Enumerating network configurations"
     uri = "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/"
     klass = "Win32_NetworkAdapterConfiguration"
-    result = @wsman.enumerate( @wsopt, nil, uri+klass)
+    result = @wsman.enumerate( @wsopt, nil, uri + klass)
     result.Items.each do |node|
       if only_enabled
         next unless node.IPEnabled.to_s == "true"
@@ -237,7 +237,7 @@ class Windows
     net_if = network
     if @data["DNSHostName"] && @data["DNSDomain"] && @data["IPAddress"]
       hw << { "class" => "netinfo",
-              "hostname" => @data["DNSHostName"]+"."+@data["DNSDomain"].split(" ").first,
+              "hostname" => @data["DNSHostName"] + "." + @data["DNSDomain"].split(" ").first,
               "ipaddr" => @data["IPAddress"]
             }
     end
@@ -247,7 +247,7 @@ class Windows
     puts "Enumerating system devices"
     uri = "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/"
     klass = "Win32_SystemDevices"
-    result = @wsman.enumerate( @wsopt, nil, uri+klass)
+    result = @wsman.enumerate( @wsopt, nil, uri + klass)
 #    dump klass, result
     # extract
     # <p:PartComponent>
@@ -312,7 +312,7 @@ class Windows
       puts "Asking for operating system"
       uri = "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/"
       klass = "Win32_OperatingSystem"
-      result = @wsman.enumerate( @wsopt, nil, uri+klass)
+      result = @wsman.enumerate( @wsopt, nil, uri + klass)
 #      dump klass, result
 #    puts result.to_xml
       os = result.body.EnumerateResponse.Items.send(klass.to_sym)
@@ -324,7 +324,7 @@ class Windows
   
       puts "Asking for computer system"
       klass = "Win32_ComputerSystem"
-      result = @wsman.enumerate( @wsopt, nil, uri+klass)
+      result = @wsman.enumerate( @wsopt, nil, uri + klass)
 #      dump klass, result
       hw = result.body.EnumerateResponse.Items.send(klass.to_sym)
       @data["TotalPhysicalMemory"] = hw.TotalPhysicalMemory.text

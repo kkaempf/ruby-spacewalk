@@ -146,9 +146,9 @@ count.times do |i|
 end
 
 stop = Time.now
-elapsed = stop-start
+elapsed = stop - start
 if good > 0
-  puts "Registered #{good} of #{count} systems at #{parms[:server]} in #{elapsed} seconds (#{good/elapsed} systems/sec, #{elapsed/good} secs/system)"
+  puts "Registered #{good} of #{count} systems at #{parms[:server]} in #{elapsed} seconds (#{good / elapsed} systems/sec, #{elapsed / good} secs/system)"
 else
   puts "Oops, no systems were registered"
 end

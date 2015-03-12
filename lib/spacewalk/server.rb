@@ -73,7 +73,7 @@ module Spacewalk
 	uri = URI.parse(@config.serverurl)
       end
 
-      args = {:host=>uri.host, :path => uri.path, :use_ssl => (uri.scheme == "https"), :timeout => 120 }
+      args = {:host => uri.host, :path => uri.path, :use_ssl => (uri.scheme == "https"), :timeout => 120 }
 
       unless options[:noconfig]
 	if @config.httpProxy

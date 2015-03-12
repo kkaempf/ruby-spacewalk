@@ -92,7 +92,7 @@ begin
     # if empty, Spacewalk will create it
     profile["description"] = parms[:description]
     puts "Registering"
-    systemid = server.register parms[:key], parms[:name]||fqdn, profile
+    systemid = server.register parms[:key], parms[:name] || fqdn, profile
     File.open(fqdn, "w+") do |f|
       f.write systemid
     end
