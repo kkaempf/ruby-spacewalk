@@ -136,15 +136,15 @@ class Windows
         reg_type = TYPES[type]
         method, valuename = case reg_type
           when :REG_SZ
-            ['GetStringValue', 'sValue']          # string
+            %w(GetStringValue sValue)          # string
           when :REG_EXPAND_SZ
-            ['GetExpandedStringValue', 'sValue']  # expanded string
+            %w(GetExpandedStringValue sValue)  # expanded string
           when :REG_BINARY
-            ['GetBinaryValue', 'uValue']          # blob
+            %w(GetBinaryValue uValue)          # blob
           when :REG_DWORD
-            ['GetDWORDValue', 'uValue']           # integer
+            %w(GetDWORDValue uValue)           # integer
           when :REG_MULTI_SZ
-            ['GetMultiStringValue', 'sValue']     # multi string
+            %w(GetMultiStringValue sValue)     # multi string
           else
             fail "Unknown type #{type}"
           end
