@@ -24,7 +24,7 @@ module Spacewalk
 #      puts "Call #{name}(#{args.inspect})"
       begin
 	# remove trailing nil values, nil is not supported in xmlrpc
-	while args.size > 0 && args[-1].nil? do
+	while args.size > 0 && args[-1].nil?
 	  args.pop
 	end
 	result = @client.call(name, *args)
