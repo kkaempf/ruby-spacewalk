@@ -357,5 +357,4 @@ class Windows
     puts "Windows.profile: #{data.inspect}"
     data
   end
-
 end # windows

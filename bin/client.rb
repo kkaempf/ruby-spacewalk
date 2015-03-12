@@ -78,7 +78,6 @@ class Client
     end
     data
   end
-
 end # client
 
 if $PROGRAM_NAME == __FILE__
