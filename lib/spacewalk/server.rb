@@ -127,7 +127,8 @@ public
       result = call "queue.get", @systemid, ACTION_VERSION, report
 #      puts "queue.get  => #{result.inspect}"
 
-      if action = result["action"]
+      action = result["action"]
+      if action
 	result["action"] = @client.get_parser.parseMethodCall(action)
       end
 #      puts "Actions => #{result.inspect}"
@@ -146,7 +147,8 @@ public
       results = call "queue.get_future_actions", @systemid, time_window
 #      puts "queue.get_future_actions  => #{results.inspect}"
       results.map! do |result|
-        if action = result["action"]
+        action = result["action"]
+        if action
           result["action"] = @client.get_parser.parseMethodCall(action)
         end
         result
