@@ -80,7 +80,6 @@ class Client
     data
   end
 
-
 end # client
 
 if $0 == __FILE__

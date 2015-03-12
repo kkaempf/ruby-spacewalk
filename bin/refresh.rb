@@ -47,7 +47,6 @@ end
 
 parms = parse_args
 
-
 # Already registered ?
 
 fqdn = parms[:fqdn]
