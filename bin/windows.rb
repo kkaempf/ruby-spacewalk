@@ -9,12 +9,12 @@ require 'cgi'
 class Windows
   # mapping for Registry 'root' pointers
   HKEYS = {
-    :HKEY_CLASSES_ROOT   => 2147483648, #(0x80000000)
-    :HKEY_CURRENT_USER   => 2147483649, #(0x80000001)    
-    :HKEY_LOCAL_MACHINE  => 2147483650, #(0x80000002)
-    :HKEY_USERS          => 2147483651, #(0x80000003)
-    :HKEY_CURRENT_CONFIG => 2147483653, #(0x80000005)
-    :HKEY_DYN_DATA       => 2147483654 #(0x80000006)
+    :HKEY_CLASSES_ROOT   => 2147483648, # (0x80000000)
+    :HKEY_CURRENT_USER   => 2147483649, # (0x80000001)
+    :HKEY_LOCAL_MACHINE  => 2147483650, # (0x80000002)
+    :HKEY_USERS          => 2147483651, # (0x80000003)
+    :HKEY_CURRENT_CONFIG => 2147483653, # (0x80000005)
+    :HKEY_DYN_DATA       => 2147483654 # (0x80000006)
   }
   TYPES = {
     1 => :REG_SZ,           # string
@@ -317,10 +317,10 @@ class Windows
 #    puts result.to_xml
       os = result.body.EnumerateResponse.Items.send(klass.to_sym)
     # debug
-    #puts klass
-    #os.each do |node|
+    # puts klass
+    # os.each do |node|
     #  puts "  #{node.name}:\t#{node.text}"
-    #end
+    # end
   
       puts "Asking for computer system"
       klass = "Win32_ComputerSystem"
@@ -329,10 +329,10 @@ class Windows
       hw = result.body.EnumerateResponse.Items.send(klass.to_sym)
       @data["TotalPhysicalMemory"] = hw.TotalPhysicalMemory.text
     # debug
-    #puts klass
-    #hw.each do |node|
+    # puts klass
+    # hw.each do |node|
     #  puts "  #{node.name}:\t#{node.text}"
-    #end
+    # end
 
     rescue
       STDERR.puts "EnumerateResponse failed for #{klass}"
