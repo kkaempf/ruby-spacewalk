@@ -20,6 +20,7 @@ module Spacewalk
     require 'rexml/document'
 
     private
+
     def call(name, *args)
 #      puts "Call #{name}(#{args.inspect})"
       begin
@@ -52,6 +53,7 @@ module Spacewalk
       fail unless ok
       result
     end
+
     public
 
     #
