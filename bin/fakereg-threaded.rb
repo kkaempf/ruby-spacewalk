@@ -147,7 +147,7 @@ count.times do |i|
   end
 end
 puts 'Waiting for threads'
-threads.each { |t| t.join }
+threads.each(&:join)
 
 stop = Time.now
 elapsed = stop - start
