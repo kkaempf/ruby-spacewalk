@@ -16,7 +16,7 @@ def usage(msg)
   STDERR.puts "*** #{msg}" if msg
   STDERR.puts "Usage:"
   STDERR.puts "  refresh [--packages] [--hardware] --server <server> <host>"
-  exit( msg ? 1 : 0)
+  exit(msg ? 1 : 0)
 end
 
 #

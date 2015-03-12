@@ -15,7 +15,7 @@ def usage(msg)
   STDERR.puts "*** #{msg}" if msg
   STDERR.puts "Usage:"
   STDERR.puts "  fakereg --server <server> [--port <port>] --key <activationkey> [--description <description>] [--solv <solv> --yaml <yaml>] --arch <arch> --count <count> <name>"
-  exit( msg ? 1 : 0)
+  exit(msg ? 1 : 0)
 end
 
 #
@@ -84,7 +84,7 @@ end
 if parms[:solv]
   require 'satsolver'
   pool = Satsolver::Pool.new
-  repo = pool.add_solv( parms[:solv] )
+  repo = pool.add_solv(parms[:solv])
   fail "Invalid .solv file: #{parms[:solv]}" unless repo
 
   if parms[:yaml]

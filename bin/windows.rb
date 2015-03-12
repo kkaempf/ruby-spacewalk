@@ -87,7 +87,7 @@ class Windows
     @wsopt.set_dump_request    
     # Name of method invoked on the class (resp. instrance)
     method = "EnumKey"
-    result = @wsman.invoke( @wsopt, uri, method )
+    result = @wsman.invoke(@wsopt, uri, method)
 #    dump method, result
     if result.nil? || result.fault?
       fault
@@ -108,7 +108,7 @@ class Windows
       puts "sSubKeyName >#{properties['sSubKeyName']}<"
       @wsopt.properties = properties
       method = "EnumValues"
-      subresult = @wsman.invoke( @wsopt, uri, method )
+      subresult = @wsman.invoke(@wsopt, uri, method)
       if subresult.nil? || subresult.fault?
         fault
         break
@@ -154,7 +154,7 @@ class Windows
           "sValueName" => key
         }
         @wsopt.properties = subproperties
-        value = @wsman.invoke( @wsopt, uri, method )
+        value = @wsman.invoke(@wsopt, uri, method)
         package[packagekey] = value.send(valuename.to_sym).text rescue ""
       end
       time = package["installtime"]
@@ -177,7 +177,7 @@ class Windows
     puts "Checking the BIOS"
     uri = "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/"
     klass = "Win32_BIOS"
-    result = @wsman.enumerate( @wsopt, nil, uri + klass)
+    result = @wsman.enumerate(@wsopt, nil, uri + klass)
     bios = result.body.EnumerateResponse.Items.send(klass.to_sym)
 #    dump klass, result
     return nil unless bios.SMBIOSPresent.to_s == "true"
@@ -200,7 +200,7 @@ class Windows
     puts "Enumerating network configurations"
     uri = "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/"
     klass = "Win32_NetworkAdapterConfiguration"
-    result = @wsman.enumerate( @wsopt, nil, uri + klass)
+    result = @wsman.enumerate(@wsopt, nil, uri + klass)
     result.Items.each do |node|
       if only_enabled
         next unless node.IPEnabled.to_s == "true"
@@ -247,7 +247,7 @@ class Windows
     puts "Enumerating system devices"
     uri = "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/"
     klass = "Win32_SystemDevices"
-    result = @wsman.enumerate( @wsopt, nil, uri + klass)
+    result = @wsman.enumerate(@wsopt, nil, uri + klass)
 #    dump klass, result
     # extract
     # <p:PartComponent>
@@ -273,7 +273,7 @@ class Windows
       #
       # Get device
       #
-      result = @wsman.get( @wsopt, uri )
+      result = @wsman.get(@wsopt, uri)
       if result.nil? || result.fault?
         STDERR.puts "Can't get #{uri}:#{selectors['DeviceID'].split('')}"
         next
@@ -312,7 +312,7 @@ class Windows
       puts "Asking for operating system"
       uri = "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/"
       klass = "Win32_OperatingSystem"
-      result = @wsman.enumerate( @wsopt, nil, uri + klass)
+      result = @wsman.enumerate(@wsopt, nil, uri + klass)
 #      dump klass, result
 #    puts result.to_xml
       os = result.body.EnumerateResponse.Items.send(klass.to_sym)
@@ -324,7 +324,7 @@ class Windows
   
       puts "Asking for computer system"
       klass = "Win32_ComputerSystem"
-      result = @wsman.enumerate( @wsopt, nil, uri + klass)
+      result = @wsman.enumerate(@wsopt, nil, uri + klass)
 #      dump klass, result
       hw = result.body.EnumerateResponse.Items.send(klass.to_sym)
       @data["TotalPhysicalMemory"] = hw.TotalPhysicalMemory.text
