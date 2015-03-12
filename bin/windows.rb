@@ -307,7 +307,6 @@ class Windows
   end
 
   def profile
-
     begin
       puts 'Asking for operating system'
       uri = 'http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/'

@@ -50,7 +50,6 @@ class Client
   end
 
   def profile
-
     # assemble registration information
     # parse /etc/os-release
     #  NAME=openSUSE

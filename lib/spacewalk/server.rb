@@ -97,7 +97,6 @@ module Spacewalk
       # check for distribution update
 #      my_id = @systemid.os_release
 #      server_id = osversion
-
     end
 
     # welcome to/from server
