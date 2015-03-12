@@ -77,7 +77,7 @@ end
 
 begin
   parms = parse_args
-rescue Exception => e
+rescue StandardError => e
   usage e.to_s
 end
 

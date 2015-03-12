@@ -77,7 +77,7 @@ end
 
 begin
   parms = parse_args
-rescue Exception => e
+rescue StandardError => e
   usage e.to_s
 end
 
@@ -140,7 +140,7 @@ count.times do |i|
     end
     print "#{name} successfully registered\n"
     good += 1
-  rescue Exception => e
+  rescue StandardError => e
     STDERR.puts "*** #{name} failed: #{e}"
   end
 end

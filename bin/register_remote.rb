@@ -68,7 +68,7 @@ begin
   parms = parse_args
 rescue SystemExit
   raise
-rescue Exception => e
+rescue StandardError => e
   usage e.to_s
 end
 

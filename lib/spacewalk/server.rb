@@ -28,7 +28,7 @@ private
 	  args.pop
 	end
 	result = @client.call(name, *args)
-      rescue Exception => e
+      rescue StandardError => e
 	raise e unless e.message =~ /Wrong content-type/
       end
       response = @client.http_last_response
