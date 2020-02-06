@@ -65,7 +65,7 @@ def mk_promise action
     promise << "mgr_update"
     policy = "remove"
   else
-    raise "Task '#{task}' not supported"
+    raise "Unsupported task '#{task}' of action '#{action}'"
   end
   promise << "\n{\n  vars:\n    \"package_list\" slist => {\n      "
   first = true
